@@ -77,37 +77,37 @@ export function Future() {
               <span className="absolute inset-[22%] rounded-full border border-gold-500/30" />
               <span className="absolute inset-[33%] rounded-full border border-navy-900/15" />
 
-              <span className="absolute inset-0 animate-orbit-slow motion-reduce:animate-none">
+              <span className="absolute inset-0 animate-orbit-slow">
                 <span className="absolute left-1/2 top-0 h-3 w-3 -translate-x-1/2 -translate-y-1/2 rounded-full bg-gold-500" />
               </span>
               <span
-                className="absolute inset-0 animate-orbit-slower motion-reduce:animate-none"
+                className="absolute inset-0 animate-orbit-slower"
                 style={{ animationDelay: "-9s" }}
               >
                 <span className="absolute left-1/2 top-0 h-2.5 w-2.5 -translate-x-1/2 -translate-y-1/2 rounded-full bg-navy-500" />
               </span>
 
               <span
-                className="absolute inset-[11%] animate-orbit-mid motion-reduce:animate-none"
+                className="absolute inset-[11%] animate-orbit-mid"
                 style={{ animationDelay: "-4s" }}
               >
                 <span className="absolute left-1/2 top-0 h-3 w-3 -translate-x-1/2 -translate-y-1/2 rounded-full bg-gold-600" />
               </span>
               <span
-                className="absolute inset-[11%] animate-orbit-mid-reverse motion-reduce:animate-none"
+                className="absolute inset-[11%] animate-orbit-mid-reverse"
                 style={{ animationDelay: "-14s" }}
               >
                 <span className="absolute left-1/2 top-0 h-2 w-2 -translate-x-1/2 -translate-y-1/2 rounded-full bg-navy-400" />
               </span>
 
               <span
-                className="absolute inset-[22%] animate-orbit-fast motion-reduce:animate-none"
+                className="absolute inset-[22%] animate-orbit-fast"
                 style={{ animationDelay: "-6s" }}
               >
                 <span className="absolute left-1/2 top-0 h-2 w-2 -translate-x-1/2 -translate-y-1/2 rounded-full bg-gold-400" />
               </span>
               <span
-                className="absolute inset-[22%] animate-orbit-mid-reverse motion-reduce:animate-none"
+                className="absolute inset-[22%] animate-orbit-mid-reverse"
                 style={{ animationDelay: "-20s" }}
               >
                 <span className="absolute left-1/2 top-0 h-2.5 w-2.5 -translate-x-1/2 -translate-y-1/2 rounded-full bg-navy-600" />
