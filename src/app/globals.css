@@ -31,7 +31,11 @@
   --animate-marquee-slow: marquee 52s linear infinite;
   --animate-float: float 7s ease-in-out infinite;
   --animate-float-slow: float 11s ease-in-out infinite;
-  --animate-ball-spin: ball-spin 22s linear infinite;
+  --animate-orbit-slow: orbit 36s linear infinite;
+  --animate-orbit-slower: orbit 46s linear infinite reverse;
+  --animate-orbit-mid: orbit 26s linear infinite;
+  --animate-orbit-mid-reverse: orbit 32s linear infinite reverse;
+  --animate-orbit-fast: orbit 18s linear infinite;
   --animate-pulse-glow: pulse-glow 3.2s ease-in-out infinite;
 
   @keyframes marquee {
@@ -53,12 +57,12 @@
     }
   }
 
-  @keyframes ball-spin {
+  @keyframes orbit {
     from {
-      transform: rotate(0deg) translateX(0);
+      transform: rotate(0deg);
     }
     to {
-      transform: rotate(360deg) translateX(0);
+      transform: rotate(360deg);
     }
   }
 
