@@ -1,0 +1,16 @@
+services:
+  db:
+    image: postgres:17-alpine
+    container_name: quinto_set_db
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: quinto_set
+      POSTGRES_PASSWORD: quinto_set
+      POSTGRES_DB: quinto_set
+    ports:
+      - "5432:5432"
+    volumes:
+      - quinto_set_pgdata:/var/lib/postgresql/data
+
+volumes:
+  quinto_set_pgdata:
