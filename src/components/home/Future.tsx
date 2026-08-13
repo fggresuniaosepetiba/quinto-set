@@ -77,40 +77,104 @@ export function Future() {
               <span className="absolute inset-[22%] rounded-full border border-gold-500/30" />
               <span className="absolute inset-[33%] rounded-full border border-navy-900/15" />
 
-              <span className="absolute inset-0 animate-orbit-slow">
-                <span className="absolute left-1/2 top-0 h-3 w-3 -translate-x-1/2 -translate-y-1/2 rounded-full bg-gold-500" />
+              <span className="absolute inset-0 animate-orbit-jupiter">
+                <span className="absolute left-1/2 top-0 -translate-x-1/2 -translate-y-1/2">
+                  <span
+                    className="block rounded-full"
+                    style={{
+                      width: 18,
+                      height: 18,
+                      background:
+                        "radial-gradient(circle at 35% 30%, #f8e3c0 0%, #d9a066 45%, #a06a3a 100%)",
+                    }}
+                  />
+                </span>
               </span>
               <span
-                className="absolute inset-0 animate-orbit-slower"
+                className="absolute inset-0 animate-orbit-saturn"
                 style={{ animationDelay: "-9s" }}
               >
-                <span className="absolute left-1/2 top-0 h-2.5 w-2.5 -translate-x-1/2 -translate-y-1/2 rounded-full bg-navy-500" />
+                <span className="absolute left-1/2 top-0 -translate-x-1/2 -translate-y-1/2">
+                  <span
+                    className="block rounded-full"
+                    style={{
+                      width: 16,
+                      height: 16,
+                      background:
+                        "radial-gradient(circle at 35% 30%, #f7e9c8 0%, #e2c07e 50%, #b0894d 100%)",
+                    }}
+                  />
+                  <span
+                    className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 rounded-full border border-gold-400/70"
+                    style={{ width: 24, height: 9, transform: "translate(-50%, -50%) rotate(-20deg)" }}
+                  />
+                </span>
               </span>
 
               <span
-                className="absolute inset-[11%] animate-orbit-mid"
+                className="absolute inset-[11%] animate-orbit-earth"
                 style={{ animationDelay: "-4s" }}
               >
-                <span className="absolute left-1/2 top-0 h-3 w-3 -translate-x-1/2 -translate-y-1/2 rounded-full bg-gold-600" />
+                <span className="absolute left-1/2 top-0 -translate-x-1/2 -translate-y-1/2">
+                  <span
+                    className="block rounded-full"
+                    style={{
+                      width: 14,
+                      height: 14,
+                      background:
+                        "radial-gradient(circle at 35% 30%, #9ad0f5 0%, #3a86c8 55%, #1a4f8b 100%)",
+                    }}
+                  />
+                </span>
               </span>
               <span
-                className="absolute inset-[11%] animate-orbit-mid-reverse"
+                className="absolute inset-[11%] animate-orbit-mars"
                 style={{ animationDelay: "-14s" }}
               >
-                <span className="absolute left-1/2 top-0 h-2 w-2 -translate-x-1/2 -translate-y-1/2 rounded-full bg-navy-400" />
+                <span className="absolute left-1/2 top-0 -translate-x-1/2 -translate-y-1/2">
+                  <span
+                    className="block rounded-full"
+                    style={{
+                      width: 12,
+                      height: 12,
+                      background:
+                        "radial-gradient(circle at 35% 30%, #f2a080 0%, #c0480e 55%, #7a2a08 100%)",
+                    }}
+                  />
+                </span>
               </span>
 
               <span
-                className="absolute inset-[22%] animate-orbit-fast"
+                className="absolute inset-[22%] animate-orbit-mercury"
                 style={{ animationDelay: "-6s" }}
               >
-                <span className="absolute left-1/2 top-0 h-2 w-2 -translate-x-1/2 -translate-y-1/2 rounded-full bg-gold-400" />
+                <span className="absolute left-1/2 top-0 -translate-x-1/2 -translate-y-1/2">
+                  <span
+                    className="block rounded-full"
+                    style={{
+                      width: 10,
+                      height: 10,
+                      background:
+                        "radial-gradient(circle at 35% 30%, #d3d9e0 0%, #8c959f 55%, #565e68 100%)",
+                    }}
+                  />
+                </span>
               </span>
               <span
-                className="absolute inset-[22%] animate-orbit-mid-reverse"
+                className="absolute inset-[22%] animate-orbit-venus"
                 style={{ animationDelay: "-20s" }}
               >
-                <span className="absolute left-1/2 top-0 h-2.5 w-2.5 -translate-x-1/2 -translate-y-1/2 rounded-full bg-navy-600" />
+                <span className="absolute left-1/2 top-0 -translate-x-1/2 -translate-y-1/2">
+                  <span
+                    className="block rounded-full"
+                    style={{
+                      width: 13,
+                      height: 13,
+                      background:
+                        "radial-gradient(circle at 35% 30%, #f8edc8 0%, #e2c070 55%, #b08a3a 100%)",
+                    }}
+                  />
+                </span>
               </span>
 
               <div className="flex h-40 w-40 flex-col items-center justify-center rounded-full bg-navy-950 text-center shadow-2xl shadow-navy-900/40 ring-4 ring-gold-400/30">
