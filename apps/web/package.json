@@ -1,0 +1,31 @@
+{
+  "name": "@quinto-set/web",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Site oficial da Quinto Set Escolinha de Vôlei — Cesarão, Rio de Janeiro",
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "eslint",
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@quinto-set/contracts": "*",
+    "@tailwindcss/postcss": "^4.3.3",
+    "@types/node": "^26.1.2",
+    "@types/react": "^19.2.18",
+    "@types/react-dom": "^19.2.4",
+    "clsx": "^2.1.1",
+    "lucide-react": "^1.29.0",
+    "next": "^16.3.0",
+    "react": "^19.2.8",
+    "react-dom": "^19.2.8",
+    "tailwindcss": "^4.3.3",
+    "typescript": "^7.0.2"
+  },
+  "devDependencies": {
+    "eslint": "^9.0.0",
+    "eslint-config-next": "^16.3.0"
+  }
+}
