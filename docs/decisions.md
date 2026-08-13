@@ -194,3 +194,27 @@ Habilitar `experimental.turbopackPluginRuntimeStrategy: "workerThreads"` no `nex
 ### Consequências
 
 - Builds mais rápidos; configuração fica em `apps/web/next.config.ts`.
+
+## ADR-011 — `npm run dev` unificado com concurrently
+
+- **Data:** 2026-08-13
+- **Status:** Aceita
+
+### Contexto
+
+Com o monorepo, era preciso abrir dois terminais para rodar web e API em desenvolvimento. O usuário pediu que um único `npm run dev` na raiz subisse os dois.
+
+### Decisão
+
+Usar **concurrently** (devDependency da raiz) para rodar web (`next dev`, porta 3000) e API (`tsx watch`, porta 3001) em paralelo:
+
+- `dev` → `concurrently -n web,api -c blue,green "npm:dev:web" "npm:dev:api"`
+- `dev:web` → só o site web
+- `dev:api` → só a API (mantido)
+
+### Consequências
+
+- Logs de cada processo rotulados com cor (`web`/`api`).
+- Uma única janela de terminal para o dev completo.
+- `Ctrl+C` encerra os dois processos.
+- Sintaxe `npm:dev:web` (shorthand do concurrently) em vez de `npm run dev --workspace ...` para leitura mais limpa.

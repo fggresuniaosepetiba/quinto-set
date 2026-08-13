@@ -38,3 +38,8 @@ Documentar o projeto com base em evidências reais (estrutura de código, commit
 - Lint do web (1 erro em `Navbar.tsx:16` + 12 warnings).
 - Root Directory = `apps/web` na Vercel (ação manual).
 - Deploy da API e banco em produção.
+
+## Ajuste posterior (2026-08-13)
+
+- **`npm run dev` unificado:** web + API em paralelo via `concurrently` (ADR-011). Verificado: `GET :3001/health` → `{"status":"ok",...}` e web `HTTP 200` com ambos rodando juntos.
+- Documentação atualizada: `README`, `dev-guide`, `roadmap`, `todo`, `decisions` (ADR-011), changelog.

@@ -7,11 +7,15 @@
     "packages/*"
   ],
   "scripts": {
-    "dev": "npm run dev --workspace @quinto-set/web",
+    "dev": "concurrently -n web,api -c blue,green \"npm:dev:web\" \"npm:dev:api\"",
+    "dev:web": "npm run dev --workspace @quinto-set/web",
     "dev:api": "npm run dev --workspace @quinto-set/api",
     "build": "npm run build --workspace @quinto-set/web",
     "start": "npm run start --workspace @quinto-set/web",
     "lint": "npm run lint --workspaces --if-present",
     "test": "npm run test --workspaces --if-present"
+  },
+  "devDependencies": {
+    "concurrently": "^10.0.4"
   }
 }

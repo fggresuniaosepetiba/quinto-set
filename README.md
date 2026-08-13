@@ -38,11 +38,12 @@ Site institucional da **Quinto Set Escolinha de Vôlei** (Cesarão, Rio de Janei
 # instala todas as dependências dos workspaces (hoisted na raiz)
 npm install
 
-# site web em modo dev (http://localhost:3000)
+# web + API em modo dev, juntos (web: http://localhost:3000, API: http://localhost:3001)
 npm run dev
 
-# API em modo dev com reload (http://localhost:3001)
-npm run dev:api
+# ou apenas um deles
+npm run dev:web   # só o site web
+npm run dev:api   # só a API (tsx watch)
 ```
 
 ### API com banco de dados (opcional)
@@ -58,8 +59,9 @@ Variáveis de ambiente da API: copie `apps/api/.env.example` para `apps/api/.env
 
 | Comando | Descrição |
 | --- | --- |
-| `npm run dev` | Site web em modo desenvolvimento |
-| `npm run dev:api` | API com reload automático (tsx watch) |
+| `npm run dev` | Web + API em modo dev, juntos (concurrently) |
+| `npm run dev:web` | Só o site web (`next dev`, porta 3000) |
+| `npm run dev:api` | Só a API (tsx watch, porta 3001) |
 | `npm run build` | Build de produção do web |
 | `npm run start` | Serve o build de produção do web |
 | `npm run lint` | ESLint em todos os workspaces |

@@ -6,7 +6,14 @@
 
 ```bash
 npm install        # instala tudo (hoisted na raiz)
-npm run dev        # site web em http://localhost:3000
+npm run dev        # web em http://localhost:3000 + API em http://localhost:3001 (juntos)
+```
+
+Para rodar apenas um deles:
+
+```bash
+npm run dev:web    # só o site web (porta 3000)
+npm run dev:api    # só a API (porta 3001)
 ```
 
 Para a API com banco local:
@@ -30,7 +37,7 @@ npm run dev:api                          # API em http://localhost:3001
 | Testes | — (a configurar) | `npm run test --workspace @quinto-set/api` |
 | Lint | `npm run lint --workspace @quinto-set/web` | — (a configurar) |
 
-Na raiz: `npm run lint`, `npm run test`, `npm run build`, `npm run start` rodam agregados nos workspaces.
+Na raiz: `npm run dev` (web + API juntos via `concurrently`), `npm run lint`, `npm run test`, `npm run build`, `npm run start` rodam agregados nos workspaces.
 
 ## Convenções de código
 

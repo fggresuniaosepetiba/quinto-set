@@ -12,6 +12,7 @@
   - Express 5 + TS 7 em camadas, tsyringe, pino, Zod, endpoint `GET /health`, teste Jest/Supertest 1/1 passando.
 - [x] **Fase 4 — Documentação** (`docs/README/…`).
   - README, `docs/*`, relatórios por fase, changelog.
+- [x] **`npm run dev` unificado** — web + API em paralelo via `concurrently` (root `dev`; novos `dev:web`/`dev:api`).
 
 ## Próximo (curto prazo)
 

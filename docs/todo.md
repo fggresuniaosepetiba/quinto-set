@@ -20,6 +20,7 @@
 - [x] `.env` local da API criado (gitignored).
 - [x] `AGENTS.md`/`CLAUDE.md` adicionados ao `.gitignore`.
 - [x] Documentação em `README.md` e `docs/`.
+- [x] `npm run dev` na raiz sobe web (`:3000`) + API (`:3001`) juntos via `concurrently` (scripts `dev:web`/`dev:api`).
 
 ## Como atualizar este arquivo
 

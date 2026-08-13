@@ -10,6 +10,9 @@
 - **Testes da API:** Jest 30 + @swc/jest + Supertest (1 teste passando).
 - **Documentação:** `README.md`, `docs/` (contexto, arquitetura, backend, decisões, roadmap, todos, guias de dev/deploy, relatórios), changelog.
 
+### Alterado
+- **`npm run dev` (raiz):** agora sobe web (`:3000`) e API (`:3001`) em paralelo via `concurrently` (devDependency da raiz). Novos scripts `dev:web`/`dev:api`; `dev:api` mantido.
+
 ### Refatorado
 - **Monorepo:** web movido para `apps/web` (workspace `@quinto-set/web`); raiz com `package.json` de workspaces; `packages/contracts` como workspace compartilhado.
 - **`.gitignore`:** padrões ajustados para cobrir pastas aninhadas; `AGENTS.md` e `CLAUDE.md` agora ignorados.
