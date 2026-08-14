@@ -90,9 +90,7 @@ describe("POST /sponsors", () => {
 
   it("responde 400 com dados inválidos", async () => {
     const app = createApp();
-    const response = await request(app)
-      .post("/sponsors")
-      .send({ company: "" });
+    const response = await request(app).post("/sponsors").send({ company: "" });
     expect(response.status).toBe(400);
     expect(response.body.error).toBe("invalid_input");
   });

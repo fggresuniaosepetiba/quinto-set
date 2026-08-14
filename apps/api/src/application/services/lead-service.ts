@@ -1,6 +1,10 @@
 import { randomUUID } from "node:crypto";
 import { inject, injectable } from "tsyringe";
-import { contactSchema, enrollmentSchema, sponsorSchema } from "@quinto-set/contracts";
+import {
+  contactSchema,
+  enrollmentSchema,
+  sponsorSchema,
+} from "@quinto-set/contracts";
 import { z } from "zod";
 import type { Lead, LeadData, LeadType } from "../../domain/entities/lead.js";
 import type { LeadRepository } from "../repositories/lead-repository.js";
