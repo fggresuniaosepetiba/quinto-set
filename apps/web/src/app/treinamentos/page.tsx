@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Image from "next/image";
 import { ArrowRight, CalendarDays, ClipboardCheck, Dumbbell, LineChart } from "lucide-react";
 import { PageHeader } from "@/components/layout/PageHeader";
 import { Container } from "@/components/ui/Container";
@@ -90,12 +91,13 @@ export default function TreinamentosPage() {
 
           <div className="mt-24 grid items-center gap-12 lg:grid-cols-2 lg:gap-20">
             <Reveal direction="left">
-              <div className="overflow-hidden rounded-2xl shadow-2xl shadow-navy-900/20 ring-1 ring-navy-900/10">
-                <img
+              <div className="relative aspect-[4/3] overflow-hidden rounded-2xl shadow-2xl shadow-navy-900/20 ring-1 ring-navy-900/10">
+                <Image
                   src={img.men}
                   alt="Jovens treinando vôlei"
-                  className="aspect-[4/3] w-full object-cover"
-                  loading="lazy"
+                  fill
+                  sizes="(min-width: 1024px) 40vw, 100vw"
+                  className="object-cover"
                 />
               </div>
             </Reveal>

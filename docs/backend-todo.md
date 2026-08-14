@@ -1,6 +1,6 @@
 # Backend — Todo
 
-> Pendências específicas da API (`apps/api`). Última atualização: 2026-08-13.
+> Pendências específicas da API (`apps/api`). Última atualização: 2026-08-14.
 
 ## Feito
 
@@ -8,29 +8,25 @@
 - [x] `GET /health` com resposta validada por `@quinto-set/contracts`.
 - [x] DI com tsyringe + reflect-metadata.
 - [x] Log estruturado com pino.
-- [x] Validação de env com Zod (fail-fast).
-- [x] Jest + @swc/jest + Supertest (1 teste passando).
+- [x] Validação de env com Zod (fail-fast), incluindo `CORS_ORIGIN`.
+- [x] Jest + @swc/jest + Supertest (7 testes passando: health + forms).
 - [x] Docker Compose para Postgres local.
+- [x] `POST /contacts`, `POST /enrollments`, `POST /sponsors` (201 com `{id, type, createdAt}`; 400 `invalid_input`).
+- [x] Persistência em memória via `LeadRepository`/`InMemoryLeadRepository` (interface pronta para trocar por Drizzle).
+- [x] CORS configurável (`CORS_ORIGIN`, default `*`).
+- [x] Middleware centralizado de tratamento de erros (ZodError → 400; demais → 500 com pino).
 
 ## Pendências
 
 ### Banco de dados
+- [ ] Implementar `PostgresLeadRepository` com Drizzle e trocar o registro no container.
 - [ ] Definir modelos Drizzle (inscrições, contatos, patrocinadores).
 - [ ] Gerar migrations (`drizzle-kit generate`) e aplicá-las (`drizzle-kit migrate`).
 
-### Endpoints
-- [ ] `POST /enrollments` — matrícula (schema já existe em contracts).
-- [ ] `POST /contacts` — contato (schema já existe).
-- [ ] `POST /sponsors` — patrocínio (schema já existe).
-- [ ] Persistência no Postgres via Drizzle.
-
 ### Qualidade
-- [ ] Middleware de tratamento de erros (centralizado).
-- [ ] Validação de entrada em rotas (Zod, com 400).
-- [ ] CORS (liberar origem do web).
 - [ ] ESLint + Prettier no workspace da API.
 - [ ] Mais testes (unitários de serviços + integração com Supertest).
 
 ### Operacional
-- [ ] Deploy da API (Render/Railway/Fly).
+- [ ] Deploy da API (Render/Railway/Fly) e Postgres gerenciado em produção (`DATABASE_URL`).
 - [ ] CI no GitHub Actions (`lint` + `typecheck` + `test` + `build`).

@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import Image from "next/image";
 import { Camera, Clapperboard } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { img } from "@/data/images";
@@ -69,13 +70,14 @@ export function Gallery() {
         {filtered.map((item) => (
           <figure
             key={item.id}
-            className="group relative overflow-hidden rounded-xl shadow-sm ring-1 ring-navy-900/10"
+            className="group relative aspect-[4/3] overflow-hidden rounded-xl shadow-sm ring-1 ring-navy-900/10"
           >
-            <img
+            <Image
               src={item.src}
               alt={item.alt}
-              loading="lazy"
-              className="aspect-[4/3] w-full object-cover transition-transform duration-500 group-hover:scale-105"
+              fill
+              sizes="(min-width: 1024px) 33vw, (min-width: 640px) 50vw, 100vw"
+              className="object-cover transition-transform duration-500 group-hover:scale-105"
             />
             <figcaption className="absolute inset-x-0 bottom-0 translate-y-2 bg-gradient-to-t from-navy-950/90 to-transparent px-4 pb-4 pt-10 opacity-0 transition-all duration-300 group-hover:translate-y-0 group-hover:opacity-100">
               <span className="flex items-center gap-2 text-sm font-semibold text-white">

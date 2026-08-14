@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
+import Image from "next/image";
 import { sponsors } from "@/data/sponsors";
 
 const SPEED = 90;
@@ -27,11 +28,12 @@ function SponsorMark({
           fill ? "" : "bg-white p-2"
         }`}
       >
-        <img
+        <Image
           src={logo}
           alt={`Logo da ${name}`}
+          width={128}
+          height={128}
           className={`h-full w-full ${fill ? "object-cover" : "object-contain"}`}
-          loading="lazy"
         />
       </span>
       <span

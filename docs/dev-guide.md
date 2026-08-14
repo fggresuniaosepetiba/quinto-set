@@ -57,14 +57,34 @@ Na raiz: `npm run dev` (web + API juntos via `concurrently`), `npm run lint`, `n
 
 1. Crie o tipo de domínio em `src/domain/entities/` (se aplicável).
 2. Crie/atualize o serviço em `src/application/services/` (com `@injectable`).
-3. Registre no container em `src/config/container.ts`.
-4. Crie o controller em `src/interfaces/http/controllers/`.
-5. Crie/atualize a rota em `src/interfaces/http/routes/` e monte em `createApp` (`src/interfaces/http/app.ts`).
-6. Adicione testes em `apps/api/tests/`.
+3. Se houver persistência, defina a interface em `src/application/repositories/` e uma implementação.
+4. Registre no container em `src/config/container.ts`.
+5. Crie o controller em `src/interfaces/http/controllers/`.
+6. Crie/atualize a rota em `src/interfaces/http/routes/` e monte em `createApp` (`src/interfaces/http/app.ts`).
+7. Adicione testes em `apps/api/tests/`.
+
+Erros de validação (Zod) são convertidos em `400 { error: "invalid_input", issues }` pelo `error-handler` central — não precisa tratar ZodError em cada controller.
 
 ## API — variáveis de ambiente
 
 A `config/env.ts` valida com Zod. Se adicionar variável nova, atualize o schema **e** o `.env.example`.
+
+| Variável | Default | Descrição |
+| --- | --- | --- |
+| `PORT` | `3001` | Porta HTTP da API |
+| `DATABASE_URL` | `postgres://quinto_set:...` | URL do Postgres (por enquanto não usado) |
+| `LOG_LEVEL` | `info` | Nível do pino |
+| `CORS_ORIGIN` | `*` | Origens liberadas no CORS (`*` = qualquer; vírgula = lista) |
+
+## Web — variáveis de ambiente
+
+- `NEXT_PUBLIC_API_URL` (default `http://localhost:3001`) — URL base que os formulários usam para chamar a API. Modelo em `apps/web/.env.example`.
+
+## API — como funcionam os formulários
+
+- Rotas `POST /contacts`, `/enrollments`, `/sponsors` → `FormController` → `LeadService` → `LeadRepository`.
+- A validação usa os schemas de `packages/contracts` (fonte única). Erro de validação → `400 { error: "invalid_input", issues }`.
+- Persistência é **em memória** por enquanto (`InMemoryLeadRepository`). Para trocar por Postgres, crie um `PostgresLeadRepository` com Drizzle e registre-o no `container.ts` em vez do `InMemoryLeadRepository`.
 
 ## Testes
 

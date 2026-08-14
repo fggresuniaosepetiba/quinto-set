@@ -1,7 +1,7 @@
 # Arquitetura — Visão Geral
 
 > **Status:** Em desenvolvimento
-> **Última atualização:** 2026-08-13
+> **Última atualização:** 2026-08-14
 
 ## Modelo: Monorepo (npm workspaces)
 
@@ -21,13 +21,13 @@ quinto-set/
 ## Fluxo de dados (atual)
 
 ```
-[Web: apps/web]  --chama--  [API: apps/api]  --lê/escreve--  [PostgreSQL (futuro)]
+[Web: apps/web]  --chama--  [API: apps/api]  --persiste--  [em memória (Postgres: futuro)]
        |                     (camadas, ver backend-architecture)
        |
        └── usa schemas Zod de [packages/contracts] para validar formulários
 ```
 
-Hoje a API expõe apenas `GET /health`. Os formulários do site validam no cliente com os schemas de `packages/contracts`. A persistência em Postgres via Drizzle ORM está preparada no projeto (dependências e docker-compose prontos), mas ainda sem modelos de dados definidos — ver [Roadmap](roadmap.md).
+Os formulários do site (contato, matrícula, patrocínio) chamam `POST /contacts`, `POST /enrollments` e `POST /sponsors` na API, que valida com os schemas de `packages/contracts` e salva em memória (`InMemoryLeadRepository`). A persistência em Postgres via Drizzle ORM está preparada (dependências e docker-compose prontos), mas os modelos ainda não foram definidos — ver [Roadmap](roadmap.md).
 
 ## Camadas do projeto web (`apps/web`)
 
@@ -43,10 +43,10 @@ Hoje a API expõe apenas `GET /health`. Os formulários do site validam no clien
 ```
 src/
 ├── config/        env (Zod), logger (pino), container (tsyringe DI)
-├── domain/        entidades/tipos de domínio (ex.: ServiceStatus)
-├── application/   casos de uso / serviços (ex.: HealthService)
+├── domain/        entidades/tipos de domínio (ex.: ServiceStatus, Lead)
+├── application/   casos de uso / serviços (ex.: HealthService, LeadService) + repositórios (LeadRepository)
 └── interfaces/    camada externa
-    └── http/      Express: app, rotas, controllers
+    └── http/      Express: app, middleware, rotas, controllers
 ```
 
 Detalhes em [backend-architecture.md](backend-architecture.md).
@@ -58,8 +58,8 @@ Pacote privado consumido por web e API. Contém schemas Zod v4 e tipos inferidos
 - `healthResponseSchema` / `HealthResponse`
 - `phoneSchema`, `emailSchema`
 - `enrollmentSchema` / `Enrollment` (aluno + responsável)
-- `contactSchema` / `Contact`
-- `sponsorSchema` / `Sponsor`
+- `contactSchema` / `Contact` (`subject` opcional)
+- `sponsorSchema` / `Sponsor` (`city`/`state` opcionais, `support` opcional)
 
 O `package.json` do contracts aponta `main`/`types`/`exports` direto para `./src/index.ts` (sem build) — consumido em TS pelo `moduleResolution: bundler`/`NodeNext`.
 
@@ -71,5 +71,5 @@ O `package.json` do contracts aponta `main`/`types`/`exports` direto para `./src
 
 ## Testes
 
-- **API:** Jest 30 + `@swc/jest` + Supertest (`apps/api/tests/health.test.ts`).
-- **Web:** lint via ESLint (`eslint-config-next` core-web-vitals). Testes de componente ainda não configurados (ver [frontend-todo](frontend-todo.md)).
+- **API:** Jest 30 + `@swc/jest` + Supertest (`apps/api/tests/health.test.ts` e `forms.test.ts` — 7 testes).
+- **Web:** lint via ESLint (`eslint-config-next` core-web-vitals) limpo. Testes de componente ainda não configurados (ver [frontend-todo](frontend-todo.md)).

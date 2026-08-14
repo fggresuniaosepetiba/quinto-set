@@ -21,14 +21,19 @@ O site é um monorepo. Configuração atual no painel Vercel:
 
 ### Variáveis de ambiente (web)
 
-O web não consome variáveis de ambiente no momento (conteúdo estático). Quando os formulários passarem a chamar a API, será necessário configurar a URL da API como env var no painel.
+Os formulários enviam os dados para a API via `NEXT_PUBLIC_API_URL` (default local `http://localhost:3001`). Na Vercel, defina:
+
+- `NEXT_PUBLIC_API_URL` = URL pública da API (ex.: `https://api.quintoset.com.br`).
+
+Modelo em `apps/web/.env.example`.
 
 ## API — ainda não publicada
 
 A API ainda **não tem deploy configurado**. Opções recomendadas:
 
 - **Render / Railway / Fly.io** — deploy simples de Node.js.
-- Exigirá: build (`tsc -p tsconfig.build.json`), start (`node dist/index.js`), e as variáveis de ambiente (`PORT`, `DATABASE_URL`, `LOG_LEVEL`, `NODE_ENV`).
+- Exigirá: build (`tsc -p tsconfig.build.json`), start (`node dist/index.js`), e as variáveis de ambiente (`PORT`, `DATABASE_URL`, `LOG_LEVEL`, `NODE_ENV`, `CORS_ORIGIN`).
+- `CORS_ORIGIN`: liberar o domínio do site (ex.: `https://quintoset.vercel.app,https://quintoset.com.br`).
 
 ### Banco de dados em produção
 

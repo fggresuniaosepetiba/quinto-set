@@ -8,3 +8,4 @@
 2. [002 — Migração para monorepo](002-monorepo-migration.md)
 3. [003 — Scaffold da API (Express + TS + Jest)](003-api-scaffold.md)
 4. [004 — Documentação](004-documentation.md)
+5. [005 — Formulários → API (endpoints + integração web)](005-form-endpoints.md)

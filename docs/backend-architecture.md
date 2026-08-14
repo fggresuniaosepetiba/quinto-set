@@ -1,7 +1,7 @@
 # Arquitetura do Backend (API)
 
-> **Status:** Em desenvolvimento (scaffold funcional)
-> **Última atualização:** 2026-08-13
+> **Status:** Em desenvolvimento (endpoints de formulários + validação Zod + persistência em memória)
+> **Última atualização:** 2026-08-14
 
 ## Stack
 
@@ -28,19 +28,29 @@ apps/api/
 │   │   └── container.ts             #   Registro tsyringe (DI) + reflect-metadata
 │   ├── domain/                      # Entidades e tipos do domínio (puro, sem frameworks)
 │   │   └── entities/
-│   │       └── service-status.ts    #   Tipo ServiceStatus
+│   │       ├── service-status.ts    #   Tipo ServiceStatus
+│   │       └── lead.ts              #   LeadType, LeadData, Lead (contato/matrícula/patrocínio)
 │   ├── application/                 # Casos de uso / serviços de aplicação
-│   │   └── services/
-│   │       └── health-service.ts    #   HealthService (@injectable)
+│   │   ├── services/
+│   │   │   ├── health-service.ts    #   HealthService (@injectable)
+│   │   │   └── lead-service.ts      #   LeadService — valida com contracts e salva
+│   │   └── repositories/
+│   │       ├── lead-repository.ts   #   Interface LeadRepository (save/list)
+│   │       └── in-memory-lead-repository.ts  #   Implementação em memória
 │   └── interfaces/                  # Adaptadores do mundo externo
 │       └── http/
-│           ├── app.ts               #   createApp(): Express app
+│           ├── app.ts               #   createApp(): Express app (cors, json, rotas, erro)
+│           ├── middleware/
+│           │   └── error-handler.ts #   ZodError → 400; demais → 500 (pino)
 │           ├── controllers/
-│           │   └── health-controller.ts
+│           │   ├── health-controller.ts
+│           │   └── form-controller.ts #   POST /contacts|enrollments|sponsors
 │           └── routes/
-│               └── health-router.ts
+│               ├── health-router.ts
+│               └── form-router.ts
 ├── tests/
-│   └── health.test.ts               # Teste do endpoint /health
+│   ├── health.test.ts               # Teste do endpoint /health
+│   └── forms.test.ts                # Testes dos 3 endpoints de formulários
 ├── dist/                            # Build (gitignored)
 ├── .env.example                     # Modelo de variáveis de ambiente
 ├── docker-compose.yml               # Postgres local (17-alpine)
@@ -71,19 +81,42 @@ ServiceStatus { status, timestamp, uptime }  [domain/entities]
 res.status(200).json(...)                  → resposta JSON
 ```
 
+```
+HTTP POST /contacts | /enrollments | /sponsors
+   │
+   ▼
+createApp() → formRouter(controller)       [interfaces/http]
+   │ router.post("/contacts", controller.create("contact", ...))
+   ▼
+FormController.create(type, req, res, next)  [interfaces/http/controllers]
+   │ injeta LeadService via tsyringe
+   ▼
+LeadService.submit(type, req.body)         [application/services]
+   │ valida com o schema Zod de @quinto-set/contracts (contactSchema, enrollmentSchema, sponsorSchema)
+   │   — inválido → ZodError → errorHandler → 400 { error: "invalid_input", issues }
+   ▼
+Lead { id (uuid), type, data, createdAt }  [domain/entities/lead]
+   │
+   ▼
+LeadRepository.save(lead)                  [application/repositories — em memória]
+   │
+   ▼
+res.status(201).json({ id, type, createdAt })  → resposta JSON
+```
+
 ## Injeção de dependência (tsyringe)
 
 O container é montado em `src/config/container.ts`:
 
 ```ts
 container.register("HealthService", { useClass: HealthService });
-
-export function resolveHealthController(): HealthController {
-  return container.resolve(HealthController);
-}
+container.register("LeadRepository", { useClass: InMemoryLeadRepository });
+container.register("LeadService", { useClass: LeadService });
 ```
 
-`HealthController` recebe `HealthService` por injeção via `@inject("HealthService")`. Requer `reflect-metadata` (importado em `container.ts` e `env.ts`), `experimentalDecorators` e `emitDecoratorMetadata` no `tsconfig.json`.
+`HealthController` recebe `HealthService` e `FormController` recebe `LeadService` por injeção via `@inject(...)`. Requer `reflect-metadata` (importado em `container.ts` e `env.ts`), `experimentalDecorators` e `emitDecoratorMetadata` no `tsconfig.json`.
+
+> **Persistência:** hoje os leads ficam em memória (`InMemoryLeadRepository`). Para persistir no Postgres, basta criar `PostgresLeadRepository` (Drizzle) e trocar o `useClass` no container — a interface `LeadRepository` e o `LeadService` não mudam.
 
 ## Variáveis de ambiente (validadas com Zod)
 
@@ -93,13 +126,14 @@ export function resolveHealthController(): HealthController {
 | `PORT` | `3001` | Porta HTTP da API |
 | `DATABASE_URL` | `postgres://quinto_set:quinto_set@localhost:5432/quinto_set` | URL do Postgres |
 | `LOG_LEVEL` | `info` | Nível do pino |
+| `CORS_ORIGIN` | `*` | Origens liberadas no CORS; `*` libera qualquer origem; separar múltiplas com vírgula |
 
 Se a validação falhar, o processo aborta com mensagem de erro (fail-fast).
 
 ## Banco de dados
 
 - `docker-compose.yml` sobe `postgres:17-alpine` na porta 5432 com banco/usuario/senha `quinto_set`.
-- Drizzle ORM está instalado e pronto para definição de esquemas/migrations, mas **nenhuma tabela foi criada ainda** (ver [Roadmap](roadmap.md)).
+- Drizzle ORM está instalado e pronto para definição de esquemas/migrations, mas **nenhuma tabela foi criada ainda**; os leads são persistidos em memória (ver [Roadmap](roadmap.md) e [backend-todo](backend-todo.md)).
 
 ## Testes
 
@@ -107,9 +141,10 @@ Se a validação falhar, o processo aborta com mensagem de erro (fail-fast).
 npm run test --workspace @quinto-set/api
 ```
 
-O Jest usa `@swc/jest` para transformar TypeScript (com suporte a decorators), e o `moduleNameMapper` remove o sufixo `.js` dos imports relativos (compat ESM). Teste atual:
+O Jest usa `@swc/jest` para transformar TypeScript (com suporte a decorators), e o `moduleNameMapper` remove o sufixo `.js` dos imports relativos (compat ESM). Testes atuais (7/7 passando):
 
 - `GET /health` → `200` com corpo `{ status: "ok", timestamp: <ISO>, uptime: <number> }`.
+- `POST /contacts`, `POST /enrollments`, `POST /sponsors` → `201` com `{ id, type, createdAt }` em dados válidos; `400 { error: "invalid_input", issues }` em dados inválidos.
 
 ## Build e execução
 

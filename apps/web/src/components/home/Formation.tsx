@@ -1,4 +1,5 @@
 import { ArrowRight } from "lucide-react";
+import Image from "next/image";
 import Link from "next/link";
 import { Container } from "@/components/ui/Container";
 import { SectionHeading } from "@/components/ui/SectionHeading";
@@ -65,38 +66,42 @@ export function Formation() {
           <Reveal direction="right" delay={120}>
             <div className="grid grid-cols-2 gap-4 sm:gap-5">
               <div className="space-y-4 sm:space-y-5">
-                <div className="overflow-hidden rounded-xl shadow-lg shadow-navy-900/15 ring-1 ring-navy-900/10">
-                  <img
+                <div className="relative aspect-[4/5] overflow-hidden rounded-xl shadow-lg shadow-navy-900/15 ring-1 ring-navy-900/10">
+                  <Image
                     src={img.quadra}
                     alt="Atleta de vôlei em quadra"
-                    className="aspect-[4/5] w-full object-cover transition-transform duration-500 hover:scale-105"
-                    loading="lazy"
+                    fill
+                    sizes="(min-width: 1024px) 25vw, 50vw"
+                    className="object-cover transition-transform duration-500 hover:scale-105"
                   />
                 </div>
-                <div className="overflow-hidden rounded-xl shadow-lg shadow-navy-900/15 ring-1 ring-navy-900/10">
-                  <img
+                <div className="relative aspect-[4/5] overflow-hidden rounded-xl shadow-lg shadow-navy-900/15 ring-1 ring-navy-900/10">
+                  <Image
                     src={img.beach}
                     alt="Jovem praticando vôlei"
-                    className="aspect-[4/5] w-full object-cover transition-transform duration-500 hover:scale-105"
-                    loading="lazy"
+                    fill
+                    sizes="(min-width: 1024px) 25vw, 50vw"
+                    className="object-cover transition-transform duration-500 hover:scale-105"
                   />
                 </div>
               </div>
               <div className="space-y-4 pt-8 sm:space-y-5 sm:pt-10">
-                <div className="overflow-hidden rounded-xl shadow-lg shadow-navy-900/15 ring-1 ring-navy-900/10">
-                  <img
+                <div className="relative aspect-[4/5] overflow-hidden rounded-xl shadow-lg shadow-navy-900/15 ring-1 ring-navy-900/10">
+                  <Image
                     src={img.player}
                     alt="Manchete de vôlei em treino"
-                    className="aspect-[4/5] w-full object-cover transition-transform duration-500 hover:scale-105"
-                    loading="lazy"
+                    fill
+                    sizes="(min-width: 1024px) 25vw, 50vw"
+                    className="object-cover transition-transform duration-500 hover:scale-105"
                   />
                 </div>
-                <div className="overflow-hidden rounded-xl shadow-lg shadow-navy-900/15 ring-1 ring-navy-900/10">
-                  <img
+                <div className="relative aspect-[4/5] overflow-hidden rounded-xl shadow-lg shadow-navy-900/15 ring-1 ring-navy-900/10">
+                  <Image
                     src={img.hit}
                     alt="Ataque de vôlei"
-                    className="aspect-[4/5] w-full object-cover transition-transform duration-500 hover:scale-105"
-                    loading="lazy"
+                    fill
+                    sizes="(min-width: 1024px) 25vw, 50vw"
+                    className="object-cover transition-transform duration-500 hover:scale-105"
                   />
                 </div>
               </div>

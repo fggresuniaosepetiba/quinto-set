@@ -5,6 +5,8 @@ import { Send } from "lucide-react";
 import { Field } from "@/components/ui/Field";
 import { FormSuccess } from "@/components/ui/FormSuccess";
 import { useFormState } from "@/lib/useFormState";
+import { postLead } from "@/lib/api";
+import { maskPhone } from "@/lib/validation";
 import {
   emailRule,
   phoneRule,
@@ -15,6 +17,7 @@ import {
 export function SponsorForm() {
   const [sent, setSent] = useState(false);
   const [submitting, setSubmitting] = useState(false);
+  const [submitError, setSubmitError] = useState<string | null>(null);
   const { values, errors, handleChange, handleBlur, validateAll } =
     useFormState({
       empresa_nome: "",
@@ -51,7 +54,7 @@ export function SponsorForm() {
     }
   };
 
-  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     const nextErrors = validateAll(rules);
     if (Object.keys(nextErrors).length > 0) {
@@ -62,10 +65,29 @@ export function SponsorForm() {
       return;
     }
     setSubmitting(true);
-    window.setTimeout(() => {
-      setSubmitting(false);
+    setSubmitError(null);
+    try {
+      await postLead("/sponsors", {
+        company: values.empresa_nome,
+        segment: isSegmentoOutro
+          ? values.empresa_segmento_outro
+          : values.empresa_segmento,
+        contactName: values.empresa_responsavel,
+        phone: maskPhone(values.empresa_telefone),
+        email: values.empresa_email,
+        support: isApoioOutro
+          ? values.empresa_apoio_outro
+          : values.empresa_apoio,
+        message: values.empresa_mensagem,
+      });
       setSent(true);
-    }, 900);
+    } catch (error) {
+      setSubmitError(
+        error instanceof Error ? error.message : "Não foi possível enviar.",
+      );
+    } finally {
+      setSubmitting(false);
+    }
   };
 
   const blur = (name: string) => handleBlur(name, rules[name]);
@@ -82,6 +104,14 @@ export function SponsorForm() {
   return (
     <div className="rounded-2xl bg-white p-6 shadow-lg shadow-navy-900/10 ring-1 ring-navy-900/10 sm:p-10">
       <form onSubmit={handleSubmit} noValidate className="grid gap-4">
+        {submitError && (
+          <p
+            role="alert"
+            className="rounded-lg border border-red-500/30 bg-red-500/10 px-4 py-3 text-sm text-red-700"
+          >
+            {submitError}
+          </p>
+        )}
         <div className="grid gap-4 sm:grid-cols-2">
           <Field
             label="Nome da empresa"
