@@ -8,6 +8,16 @@ export const healthResponseSchema = z.object({
 
 export type HealthResponse = z.infer<typeof healthResponseSchema>;
 
+export const leadTypeSchema = z.enum(["contact", "enrollment", "sponsor"]);
+
+export const createdLeadSchema = z.object({
+  id: z.string(),
+  type: leadTypeSchema,
+  createdAt: z.string(),
+});
+
+export type CreatedLead = z.infer<typeof createdLeadSchema>;
+
 const requiredText = (message: string) =>
   z
     .string()
