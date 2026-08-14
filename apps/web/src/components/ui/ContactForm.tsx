@@ -5,6 +5,8 @@ import { Send } from "lucide-react";
 import { Field } from "@/components/ui/Field";
 import { FormSuccess } from "@/components/ui/FormSuccess";
 import { useFormState } from "@/lib/useFormState";
+import { postLead } from "@/lib/api";
+import { maskPhone } from "@/lib/validation";
 import {
   emailRule,
   phoneRule,
@@ -23,6 +25,7 @@ export function ContactForm({
 }: ContactFormProps) {
   const [sent, setSent] = useState(false);
   const [submitting, setSubmitting] = useState(false);
+  const [submitError, setSubmitError] = useState<string | null>(null);
   const { values, errors, handleChange, handleBlur, validateAll } =
     useFormState({
       nome: "",
@@ -39,7 +42,7 @@ export function ContactForm({
     mensagem: requiredRule(true),
   };
 
-  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     const nextErrors = validateAll(rules);
     if (Object.keys(nextErrors).length > 0) {
@@ -50,10 +53,23 @@ export function ContactForm({
       return;
     }
     setSubmitting(true);
-    window.setTimeout(() => {
-      setSubmitting(false);
+    setSubmitError(null);
+    try {
+      await postLead("/contacts", {
+        name: values.nome,
+        email: values.email,
+        phone: values.telefone ? maskPhone(values.telefone) : undefined,
+        subject: values.assunto || subject || undefined,
+        message: values.mensagem,
+      });
       setSent(true);
-    }, 900);
+    } catch (error) {
+      setSubmitError(
+        error instanceof Error ? error.message : "Não foi possível enviar.",
+      );
+    } finally {
+      setSubmitting(false);
+    }
   };
 
   const blur = (name: string) => handleBlur(name, rules[name]);
@@ -69,6 +85,14 @@ export function ContactForm({
 
   return (
     <form onSubmit={handleSubmit} noValidate className="grid gap-4">
+      {submitError && (
+        <p
+          role="alert"
+          className="rounded-lg border border-red-500/30 bg-red-500/10 px-4 py-3 text-sm text-red-700"
+        >
+          {submitError}
+        </p>
+      )}
       <div className="grid gap-4 sm:grid-cols-2">
         <Field
           label="Nome"
@@ -126,7 +150,6 @@ export function ContactForm({
         onBlur={blur}
         error={errors.mensagem}
       />
-      <input type="hidden" name="subject" value={subject} />
       <button
         type="submit"
         disabled={submitting}

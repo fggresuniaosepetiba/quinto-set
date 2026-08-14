@@ -5,6 +5,8 @@ import { ShieldCheck, Send } from "lucide-react";
 import { Field } from "@/components/ui/Field";
 import { FormSuccess } from "@/components/ui/FormSuccess";
 import { useFormState } from "@/lib/useFormState";
+import { postLead } from "@/lib/api";
+import { maskPhone } from "@/lib/validation";
 import {
   emailRule,
   phoneRule,
@@ -15,6 +17,7 @@ import {
 export function MatriculaForm() {
   const [sent, setSent] = useState(false);
   const [submitting, setSubmitting] = useState(false);
+  const [submitError, setSubmitError] = useState<string | null>(null);
   const { values, errors, handleChange, handleBlur, validateAll } =
     useFormState({
       aluno_nome: "",
@@ -48,7 +51,7 @@ export function MatriculaForm() {
     resp_email: emailRule(true),
   };
 
-  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     const nextErrors = validateAll(rules);
     if (Object.keys(nextErrors).length > 0) {
@@ -59,10 +62,35 @@ export function MatriculaForm() {
       return;
     }
     setSubmitting(true);
-    window.setTimeout(() => {
-      setSubmitting(false);
+    setSubmitError(null);
+    try {
+      await postLead("/enrollments", {
+        student: {
+          name: values.aluno_nome,
+          birthDate: values.aluno_nascimento,
+          sex: values.aluno_sexo,
+          phone: maskPhone(values.aluno_telefone),
+          email: values.aluno_email || undefined,
+          address: values.aluno_endereco,
+          school: values.aluno_escola,
+          grade: values.aluno_serie,
+          category: values.aluno_categoria,
+        },
+        guardian: {
+          name: values.resp_nome,
+          relationship: values.resp_parentesco,
+          phone: maskPhone(values.resp_telefone),
+          email: values.resp_email,
+        },
+      });
       setSent(true);
-    }, 900);
+    } catch (error) {
+      setSubmitError(
+        error instanceof Error ? error.message : "Não foi possível enviar.",
+      );
+    } finally {
+      setSubmitting(false);
+    }
   };
 
   const blur = (name: string) => handleBlur(name, rules[name]);
@@ -79,6 +107,14 @@ export function MatriculaForm() {
   return (
     <div className="rounded-2xl bg-white p-6 shadow-lg shadow-navy-900/10 ring-1 ring-navy-900/10 sm:p-10">
       <form onSubmit={handleSubmit} noValidate className="grid gap-8">
+        {submitError && (
+          <p
+            role="alert"
+            className="rounded-lg border border-red-500/30 bg-red-500/10 px-4 py-3 text-sm text-red-700"
+          >
+            {submitError}
+          </p>
+        )}
         <fieldset>
           <legend className="mb-5 flex items-center gap-2 font-display text-lg font-bold uppercase tracking-wide text-navy-900">
             <span className="flex h-8 w-8 items-center justify-center rounded-md bg-navy-950 text-sm text-gold-400">
