@@ -1,3 +1,4 @@
+import Image from "next/image";
 import Link from "next/link";
 import { MapPin, Sparkles } from "lucide-react";
 import { siteConfig } from "@/data/site";
@@ -115,11 +116,12 @@ export function Footer() {
               {founders.map((founder) => (
                 <li key={founder.name} className="flex items-center gap-3">
                   <span className="flex h-12 w-12 shrink-0 items-center justify-center overflow-hidden rounded-full bg-white p-1.5 ring-1 ring-white/15">
-                    <img
+                    <Image
                       src={founder.logo}
                       alt={`Logo da ${founder.name}`}
+                      width={96}
+                      height={96}
                       className="h-full w-full object-contain"
-                      loading="lazy"
                     />
                   </span>
                   <span>

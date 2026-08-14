@@ -1,4 +1,5 @@
 import { ChevronRight, Zap } from "lucide-react";
+import Image from "next/image";
 import Link from "next/link";
 import { Container } from "@/components/ui/Container";
 import { SectionHeading } from "@/components/ui/SectionHeading";
@@ -27,12 +28,13 @@ export function Purpose() {
         <div className="grid items-center gap-12 lg:grid-cols-2 lg:gap-20">
           <Reveal>
             <div className="relative">
-              <div className="overflow-hidden rounded-2xl shadow-2xl shadow-navy-900/20 ring-1 ring-navy-900/10">
-                <img
+              <div className="relative aspect-[4/3] overflow-hidden rounded-2xl shadow-2xl shadow-navy-900/20 ring-1 ring-navy-900/10">
+                <Image
                   src={img.youth}
                   alt="Jovens praticando vôlei em equipe"
-                  className="aspect-[4/3] w-full object-cover"
-                  loading="lazy"
+                  fill
+                  sizes="(min-width: 1024px) 40vw, 100vw"
+                  className="object-cover"
                 />
               </div>
               <div className="absolute -bottom-8 -right-4 hidden rounded-xl bg-navy-950 px-6 py-5 shadow-xl ring-1 ring-gold-400/30 sm:block">

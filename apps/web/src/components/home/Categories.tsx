@@ -1,3 +1,4 @@
+import Image from "next/image";
 import { Container } from "@/components/ui/Container";
 import { SectionHeading } from "@/components/ui/SectionHeading";
 import { Reveal } from "@/components/ui/Reveal";
@@ -46,11 +47,12 @@ export function Categories() {
             <Reveal key={category.code} delay={index * 80}>
               <article className="group relative flex h-full flex-col overflow-hidden rounded-2xl bg-white shadow-sm ring-1 ring-navy-900/10 transition-all duration-300 hover:-translate-y-1.5 hover:shadow-xl hover:shadow-navy-900/15">
                 <div className="relative h-44 overflow-hidden">
-                  <img
+                  <Image
                     src={category.image}
                     alt={`Categoria ${category.code} da Quinto Set`}
-                    className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-110"
-                    loading="lazy"
+                    fill
+                    sizes="(min-width: 1024px) 25vw, (min-width: 640px) 50vw, 100vw"
+                    className="object-cover transition-transform duration-500 group-hover:scale-110"
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-navy-950/70 to-transparent" />
                   <span className="absolute left-4 top-4 rounded-md bg-gold-400 px-2.5 py-1 font-display text-sm font-bold uppercase tracking-wider text-navy-950">
