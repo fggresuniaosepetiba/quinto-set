@@ -15,9 +15,7 @@ module.exports = {
       },
     ],
   },
-  transformIgnorePatterns: [
-    "/node_modules/(?!@quinto-set/contracts)",
-  ],
+  transformIgnorePatterns: ["/node_modules/(?!@quinto-set/contracts)"],
   moduleNameMapper: {
     "^(\\.{1,2}/.*)\\.js$": "$1",
   },

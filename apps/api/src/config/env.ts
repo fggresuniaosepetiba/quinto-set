@@ -22,7 +22,6 @@ const parsed = envSchema.safeParse(process.env);
 
 if (!parsed.success) {
   const details = JSON.stringify(parsed.error.flatten().fieldErrors, null, 2);
-  // eslint-disable-next-line no-console
   console.error(`Configuração de ambiente inválida: ${details}`);
   process.exit(1);
 }
