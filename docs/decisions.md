@@ -218,3 +218,24 @@ Usar **concurrently** (devDependency da raiz) para rodar web (`next dev`, porta 
 - Uma única janela de terminal para o dev completo.
 - `Ctrl+C` encerra os dois processos.
 - Sintaxe `npm:dev:web` (shorthand do concurrently) em vez de `npm run dev --workspace ...` para leitura mais limpa.
+
+## ADR-012 — Endpoints de formulários com persistência em memória (Drizzle adiado)
+
+- **Data:** 2026-08-14
+- **Status:** Aceita
+
+### Contexto
+
+Os formulários do web (matrícula, contato, patrocínio) precisavam de endpoints reais na API. A persistência em Postgres via Drizzle exigiria definir modelos/migrations e subir o banco — um passo maior do que o necessário para validar o fluxo ponta a ponta.
+
+### Decisão
+
+- Criar `POST /contacts`, `POST /enrollments`, `POST /sponsors` validando com os schemas de `@quinto-set/contracts` (Zod).
+- Persistir em memória (`InMemoryLeadRepository`) atrás da interface `LeadRepository`; a troca por `PostgresLeadRepository` (Drizzle) é uma implementação substituta, sem alterar `LeadService` nem os controllers.
+- Respostas: `201 { id, type, createdAt }`; `400 { error: "invalid_input", issues }`; erros não mapeados → `500 { error: "internal_server_error" }` (middleware centralizado).
+
+### Consequências
+
+- Fluxo ponta a end-to-end (web → API) funcional e testável sem banco.
+- Dados não persistem entre reinicializações da API — migração para Drizzle fica registrada no `backend-todo.md`.
+- Contratos tiveram ajustes: `subject` opcional em `contactSchema`; `city`/`state` opcionais e `support` opcional em `sponsorSchema` (alinhados aos formulários reais).

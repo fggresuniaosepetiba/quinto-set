@@ -81,12 +81,23 @@ npm run typecheck --workspace @quinto-set/api
 | Método | Rota | Descrição |
 | --- | --- | --- |
 | `GET` | `/health` | Health check (status, timestamp, uptime) |
+| `POST` | `/contacts` | Contato via site (name, email, phone, subject?, message) |
+| `POST` | `/enrollments` | Matrícula (student + guardian) |
+| `POST` | `/sponsors` | Patrocínio (company, segment, contactName, phone, email, support?, message) |
 
-Exemplo de resposta:
+Os endpoints `POST` validam o corpo com os schemas de `@quinto-set/contracts` (Zod). Respostas:
+
+- `201` → `{ "id": "<uuid>", "type": "contact|enrollment|sponsor", "createdAt": "<ISO>" }`
+- `400` → `{ "error": "invalid_input", "issues": [{ "path", "message" }] }`
+- `500` → `{ "error": "internal_server_error" }`
+
+Exemplo de resposta de health:
 
 ```json
 { "status": "ok", "timestamp": "2026-08-13T16:06:23.921Z", "uptime": 4.03 }
 ```
+
+> **Persistência:** os dados dos formulários ficam em memória enquanto a API estiver rodando (troca para Postgres via Drizzle é o próximo passo). A variável `CORS_ORIGIN` controla as origens liberadas (default `*`).
 
 ## Testes
 

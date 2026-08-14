@@ -13,18 +13,20 @@
 - [x] **Fase 4 — Documentação** (`docs/README/…`).
   - README, `docs/*`, relatórios por fase, changelog.
 - [x] **`npm run dev` unificado** — web + API em paralelo via `concurrently` (root `dev`; novos `dev:web`/`dev:api`).
+- [x] **Endpoints de formulários** — `POST /contacts`, `POST /enrollments`, `POST /sponsors` com validação Zod (400 `invalid_input`) e persistência em memória (repositório com interface para trocar por Drizzle).
+- [x] **Web → API** — formulários de matrícula/contato/patrocínio enviam para a API (`src/lib/api.ts` + `NEXT_PUBLIC_API_URL`).
+- [x] **Lint do web limpo** — erro `Navbar.tsx:16` corrigido + 12 warnings `<img>` → `next/image`.
 
 ## Próximo (curto prazo)
 
-- [ ] **Resolver lint do web** — 1 erro real em `apps/web/src/components/layout/Navbar.tsx:16` (`setState` síncrono em `useEffect` — regra `react-hooks/set-state-in-effect`) + 12 warnings (ex.: `<img>` no `Footer.tsx` → usar `next/image`).
 - [ ] **Configurar deploy da API** (Render/Railway/Fly ou similar) e o banco Postgres em produção.
 - [ ] **Registrar/confirmar domínio** `quintoset.com.br` na Vercel e atualizar `siteConfig.url` (ADR-007).
+- [ ] **Root Directory** = `apps/web` no painel Vercel (ação manual pendente).
 
 ## Médio prazo
 
-- [ ] **Modelos de dados no Postgres** via Drizzle ORM (schema `users/leads/inscrições`).
-- [ ] **Endpoints REST de formulários**: `POST /enrollments`, `POST /contacts`, `POST /sponsors` (schemas já existem em `packages/contracts`).
-- [ ] **Envio de formulários do web para a API** (hoje os formulários validam no cliente apenas).
+- [ ] **Persistência no Postgres** via Drizzle ORM (`PostgresLeadRepository` + migrations; hoje em memória).
+- [ ] **ESLint + Prettier** no workspace da API.
 - [ ] **Testes do frontend**: Jest + `next/jest` + Testing Library (componentes, formulários).
 - [ ] **Configurar GitHub Actions**: CI com `lint`, `typecheck`, `test`, `build`.
 - [ ] **Preencher redes sociais** no `siteConfig` (Instagram, TikTok, YouTube).
