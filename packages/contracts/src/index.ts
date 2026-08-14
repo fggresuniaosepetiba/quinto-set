@@ -55,6 +55,7 @@ export const contactSchema = z.object({
   name: requiredText("Informe seu nome."),
   email: emailSchema,
   phone: phoneSchema.optional(),
+  subject: z.string().trim().max(120).optional(),
   message: requiredText("Escreva sua mensagem.").max(2000),
 });
 
@@ -67,12 +68,14 @@ export const sponsorSchema = z.object({
   contactName: requiredText("Informe o nome do contato."),
   phone: phoneSchema,
   email: emailSchema,
-  city: requiredText("Informe a cidade."),
+  city: z.string().trim().max(255).optional(),
   state: z
     .string()
     .trim()
     .length(2, { message: "Informe a UF." })
-    .toUpperCase(),
+    .toUpperCase()
+    .optional(),
+  support: z.string().trim().max(255).optional(),
   message: z.string().trim().max(2000).optional(),
 });
 

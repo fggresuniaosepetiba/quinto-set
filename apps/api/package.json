@@ -12,6 +12,7 @@
   },
   "dependencies": {
     "@quinto-set/contracts": "*",
+    "cors": "^2.8.6",
     "dotenv": "^17.4.2",
     "drizzle-orm": "^0.45.2",
     "express": "^5.2.1",
@@ -25,6 +26,7 @@
     "@jest/globals": "^30.4.1",
     "@swc/core": "^1.15.47",
     "@swc/jest": "^0.2.39",
+    "@types/cors": "^2.8.19",
     "@types/express": "^5.0.6",
     "@types/jest": "^30.0.0",
     "@types/node": "^26.1.2",
