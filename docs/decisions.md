@@ -1,6 +1,6 @@
 # Decisões (ADR)
 
-> Registro de decisões de arquitetura/engenharia com o contexto e o racional de cada uma. Última atualização: 2026-08-13.
+> Registro de decisões de arquitetura/engenharia com o contexto e o racional de cada uma. Última atualização: 2026-08-14.
 
 ## ADR-001 — Framework único de testes: Jest (sem Vitest)
 
@@ -239,3 +239,25 @@ Os formulários do web (matrícula, contato, patrocínio) precisavam de endpoint
 - Fluxo ponta a end-to-end (web → API) funcional e testável sem banco.
 - Dados não persistem entre reinicializações da API — migração para Drizzle fica registrada no `backend-todo.md`.
 - Contratos tiveram ajustes: `subject` opcional em `contactSchema`; `city`/`state` opcionais e `support` opcional em `sponsorSchema` (alinhados aos formulários reais).
+
+## ADR-013 — Fluxo de PRs: eu crio, o usuário revisa; merge com Rebase
+
+- **Data:** 2026-08-14
+- **Status:** Aceita
+
+### Contexto
+
+O merge do PR #1 (`feat/backend-api` → `main`) foi feito manualmente pelo usuário na interface do GitHub, que quer ganhar prática com PRs. Daqui em diante, o agente (eu) passa a criar os PRs, e o usuário revisa antes do merge. O projeto usa Conventional Commits em inglês (ADR-006) e changelog baseado nos commits reais.
+
+### Decisão
+
+- **Criação de PR:** o agente cria via `gh pr create --base main --head <branch>` com `--title`/`--body` descritivos (resumo das mudanças e commits) para facilitar a revisão.
+- **Estratégia de merge padrão:** **Rebase and merge** — commits entram na `main` como estão (história linear, sem commit de merge), preservando a granularidade dos commits convencionais/atômicos.
+- **Exceção:** PRs com commits bagunçados/WIP podem usar **Squash and merge** caso a caso.
+- **Branches de feature:** mantidas após o merge (local e remota) enquanto houver pendências associadas; só são deletadas quando a pendência for resolvida e o usuário concordar.
+
+### Consequências
+
+- Histórico linear e legível; changelog continua mapeável aos commits reais.
+- Revisão humana obrigatória antes do merge (o usuário decide quando mergear).
+- Branches abertas por mais tempo podem acumular pendências — exige disciplina de rebase antes de novos merges.
