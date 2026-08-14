@@ -1,6 +1,6 @@
 # Guia de Desenvolvimento
 
-> Como trabalhar neste projeto no dia a dia. Última atualização: 2026-08-13.
+> Como trabalhar neste projeto no dia a dia. Última atualização: 2026-08-14.
 
 ## Setup inicial
 
@@ -46,6 +46,15 @@ Na raiz: `npm run dev` (web + API juntos via `concurrently`), `npm run lint`, `n
 - **Validação:** sempre que houver dados de formulário, usar os schemas de `packages/contracts` (fonte única de verdade).
 - **API — imports:** sempre relativos com sufixo `.js` (`../../config/env.js`) — ESM puro, sem aliases. Não reintroduzir `baseUrl`/`@/*` na API (ADR-002).
 - **Web — imports:** alias `@/*` → `src/*` (Next.js resolve nativamente).
+
+## Git e Pull Requests
+
+- **Branches de feature:** trabalhe sempre em uma branch (ex.: `feat/...`); `main` só recebe via PR.
+- **Criação do PR:** o agente (opencode) cria via `gh pr create --base main --head <branch>` com título/corpo descritivos.
+- **Revisão:** o usuário revisa o diff no GitHub antes de mergear — nenhum merge é feito sem revisão.
+- **Estratégia de merge padrão:** **Rebase and merge** (história linear, preserva os commits convencionais). Squash fica reservado para PRs com commits bagunçados. Ver ADR-013.
+- **Branches pós-merge:** mantidas local e remota enquanto houver pendências associadas; deletar só com consentimento do usuário.
+- **Commits:** Conventional Commits em inglês (ADR-006).
 
 ## CSS / Tailwind
 
