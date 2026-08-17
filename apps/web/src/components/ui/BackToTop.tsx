@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import { ArrowUp } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { smoothScrollTo } from "@/lib/smoothScroll";
 
 export function BackToTop() {
   const [visible, setVisible] = useState(false);
@@ -18,9 +19,9 @@ export function BackToTop() {
     <button
       type="button"
       aria-label="Voltar ao topo"
-      onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
+      onClick={() => smoothScrollTo(0)}
       className={cn(
-        "fixed bottom-6 right-6 z-50 flex h-11 w-11 items-center justify-center rounded-full bg-gold-400 text-navy-950 shadow-lg shadow-navy-950/30 transition-all duration-300 hover:bg-gold-300 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gold-400",
+        "fixed bottom-6 right-6 z-50 flex h-11 w-11 cursor-pointer items-center justify-center rounded-full bg-gold-400 text-navy-950 shadow-lg shadow-navy-950/30 transition-all duration-300 hover:bg-gold-300 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gold-400",
         visible
           ? "translate-y-0 opacity-100"
           : "pointer-events-none translate-y-4 opacity-0",
