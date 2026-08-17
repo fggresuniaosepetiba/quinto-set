@@ -130,8 +130,8 @@ export function Hero() {
       </div>
 
       <a
-        href="#proposito"
-        aria-label="Rolar para a próxima seção"
+        href="#footer"
+        aria-label="Rolar para o rodapé"
         className="absolute bottom-6 left-1/2 -translate-x-1/2 text-cream-100/60 transition-colors hover:text-gold-400"
       >
         <ChevronDown className="h-7 w-7 animate-bounce" />

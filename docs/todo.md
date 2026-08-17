@@ -6,8 +6,8 @@
 
 | Prioridade | Tarefa | Onde | Status |
 | --- | --- | --- | --- |
-| Alta | Vercel: Root Directory = `apps/web` | Painel Vercel (ação manual) | Bloqueado por ação do usuário |
-| Média | Definir domínio real e atualizar `siteConfig.url` | `apps/web/src/data/site.ts` | Aberto (ADR-007) |
+| Alta | Vercel: Root Directory = `apps/web` | Painel Vercel (ação manual) | Concluído pelo usuário |
+| Média | Definir domínio real e atualizar `siteConfig.url` | `apps/web/src/data/site.ts` | Concluído (ADR-007 resolvida) |
 | Média | Persistência dos formulários no Postgres (hoje em memória) | `apps/api` | Aberto |
 | Média | Deploy da API em produção | Render/Railway/Fly | Aberto |
 | Média | ESLint + Prettier no workspace da API | `apps/api` | Aberto |
@@ -27,6 +27,11 @@
 - [x] Endpoints da API: `POST /contacts`, `POST /enrollments`, `POST /sponsors` (validação Zod + repositório em memória).
 - [x] Formulários do web enviando para a API (`apps/web/src/lib/api.ts` + `ContactForm`, `MatriculaForm`, `SponsorForm`).
 - [x] Lint do web limpo (erro `Navbar.tsx:16` corrigido + 12 warnings `<img>` → `next/image` resolvidos).
+- [x] Testes do frontend (Jest + `next/jest`): 49/49 passando.
+- [x] CI no GitHub Actions (`lint` + `typecheck` + `test` + `build`).
+- [x] Vercel: Root Directory = `apps/web` (feito pelo usuário).
+- [x] Domínio real confirmado: `https://quintoset.vercel.app` (ADR-007 resolvida).
+- [x] Setinha do Hero rola direto para o footer.
 
 ## Como atualizar este arquivo
 

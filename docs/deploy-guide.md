@@ -15,9 +15,9 @@ O site é um monorepo. Configuração atual no painel Vercel:
 
 ### Domínio
 
-- Domínio configurado no código: `quintoset.com.br` (ver ADR-007).
-- Deploy atual visível em `quintoset.vercel.app`.
-- Para apontar o domínio real, registrar no painel Vercel (DNS) e atualizar `siteConfig.url` em `apps/web/src/data/site.ts`.
+- Domínio confirmado e em uso: `quintoset.vercel.app` (ADR-007 resolvida).
+- Deploy atual visível em `quintoset.vercel.app`; `siteConfig.url` já reflete esse domínio.
+- Para usar um domínio próprio, registrar no painel Vercel (DNS) e atualizar `siteConfig.url` em `apps/web/src/data/site.ts`.
 
 ### Variáveis de ambiente (web)
 

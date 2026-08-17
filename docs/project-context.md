@@ -25,12 +25,12 @@ Escolinha social de vôlei no Cesarão, Rio de Janeiro. Inclusão esportiva, for
 
 | Item | Valor |
 | --- | --- |
-| Domínio configurado | `https://quintoset.com.br` (no código) |
+| Domínio (produção) | `https://quintoset.vercel.app` |
 | Deploy ativo | Vercel (`quintoset.vercel.app`) |
 | E-mail | `contato@quintoset.com.br` |
 | Redes sociais | Instagram, TikTok e YouTube (campos vazios no código — a preencher) |
 
-> ⚠️ **Divergência conhecida:** o `siteConfig.url` em `apps/web/src/data/site.ts` aponta para `https://quintoset.com.br`, mas o deploy atual roda em `quintoset.vercel.app`. Ver [Decisões (ADR)](decisions.md).
+> ✅ **Domínio confirmado:** o `siteConfig.url` em `apps/web/src/data/site.ts` aponta para `https://quintoset.vercel.app`, o deploy real (ADR-007 resolvida).
 
 ## Instituições parceiras
 

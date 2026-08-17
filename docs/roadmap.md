@@ -20,8 +20,8 @@
 ## Próximo (curto prazo)
 
 - [ ] **Configurar deploy da API** (Render/Railway/Fly ou similar) e o banco Postgres em produção.
-- [ ] **Registrar/confirmar domínio** `quintoset.com.br` na Vercel e atualizar `siteConfig.url` (ADR-007).
-- [ ] **Root Directory** = `apps/web` no painel Vercel (ação manual pendente).
+- [x] **Registrar/confirmar domínio** — confirmado `quintoset.vercel.app` e `siteConfig.url` atualizado (ADR-007 resolvida).
+- [x] **Root Directory** = `apps/web` no painel Vercel (feito pelo usuário).
 
 ## Médio prazo
 

@@ -123,10 +123,10 @@ Usar **Conventional Commits** e **mensagens em inglês** (`feat:`, `fix:`, `refa
 
 - Histórico padronizado, passível de geração de changelog automático.
 
-## ADR-007 — Divergência conhecida: domínio no código vs deploy
+## ADR-007 — Domínio do site em produção
 
 - **Data:** 2026-08-13
-- **Status:** Aberta (não resolvida)
+- **Status:** Resolvida (2026-08-17)
 
 ### Contexto
 
@@ -135,6 +135,10 @@ Usar **Conventional Commits** e **mensagens em inglês** (`feat:`, `fix:`, `refa
 ### Decisão
 
 Manter o código como está por enquanto; o valor em produção (`vercel.app`) não é afetado por essa constante (usada principalmente para metadados/links). **Não alterar sem confirmação do domínio real.**
+
+### Resolução
+
+Domínio real confirmado pelo usuário: `https://quintoset.vercel.app`. `siteConfig.url` atualizado para refletir o deploy real.
 
 ### Consequências
 

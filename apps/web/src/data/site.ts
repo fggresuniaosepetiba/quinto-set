@@ -6,7 +6,7 @@ export const siteConfig = {
     "O quinto set é o momento em que tudo pode mudar. É o set da decisão — e todo grande jogo tem um momento decisivo.",
   description:
     "Escolinha social de vôlei no Cesarão, Rio de Janeiro. Inclusão esportiva, formação de jovens e adolescentes de 14 a 19 anos e educação como base de tudo. Matrícula gratuita.",
-  url: "https://quintoset.com.br",
+  url: "https://quintoset.vercel.app",
   email: "contato@quintoset.com.br",
   instagram: "",
   tiktok: "",
