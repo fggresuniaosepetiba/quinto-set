@@ -24,7 +24,7 @@
 - [ ] Gerar migrations (`drizzle-kit generate`) e aplicá-las (`drizzle-kit migrate`).
 
 ### Qualidade
-- [ ] ESLint + Prettier no workspace da API.
+- [x] ESLint + Prettier no workspace da API (format:check no CI).
 - [ ] Mais testes (unitários de serviços + integração com Supertest).
 
 ### Operacional

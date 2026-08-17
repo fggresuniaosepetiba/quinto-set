@@ -39,6 +39,9 @@ jobs:
       - name: Lint
         run: npm run lint
 
+      - name: Format check (api)
+        run: npm run format:check --workspace @quinto-set/api
+
       - name: Typecheck
         run: npm run typecheck
 

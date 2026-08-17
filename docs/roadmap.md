@@ -26,7 +26,7 @@
 ## Médio prazo
 
 - [ ] **Persistência no Postgres** via Drizzle ORM (`PostgresLeadRepository` + migrations; hoje em memória).
-- [ ] **ESLint + Prettier** no workspace da API.
+- [x] **ESLint + Prettier** no workspace da API (format:check no CI).
 - [ ] **Testes do frontend**: Jest + `next/jest` + Testing Library (componentes, formulários).
 - [ ] **Configurar GitHub Actions**: CI com `lint`, `typecheck`, `test`, `build`.
 - [ ] **Preencher redes sociais** no `siteConfig` (Instagram, TikTok, YouTube).

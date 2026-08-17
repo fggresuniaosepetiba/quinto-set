@@ -10,7 +10,7 @@
 | Média | Definir domínio real e atualizar `siteConfig.url` | `apps/web/src/data/site.ts` | Concluído (ADR-007 resolvida) |
 | Média | Persistência dos formulários no Postgres (hoje em memória) | `apps/api` | Aberto |
 | Média | Deploy da API em produção | Render/Railway/Fly | Aberto |
-| Média | ESLint + Prettier no workspace da API | `apps/api` | Aberto |
+| Média | ESLint + Prettier no workspace da API | `apps/api` | Concluído (format:check no CI) |
 | Média | Testes do frontend (Jest + `next/jest`) | `apps/web` | Aberto |
 | Média | CI no GitHub Actions (`lint` + `typecheck` + `test` + `build`) | raiz | Aberto |
 | Baixa | Preencher redes sociais no `siteConfig` | `apps/web/src/data/site.ts` | Aberto |
