@@ -142,7 +142,7 @@ export function Hero() {
         }}
         className="absolute bottom-6 left-1/2 -translate-x-1/2 text-cream-100/60 transition-colors hover:text-gold-400"
       >
-        <ChevronDown className="h-7 w-7 animate-bounce" />
+        <ChevronDown className="h-7 w-7 animate-float-soft" />
       </a>
 
       <div

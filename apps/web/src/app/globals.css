@@ -31,6 +31,7 @@
   --animate-marquee-slow: marquee 52s linear infinite;
   --animate-float: float 7s ease-in-out infinite;
   --animate-float-slow: float 11s ease-in-out infinite;
+  --animate-float-soft: float-soft 3s ease-in-out infinite;
   --animate-orbit-mercury: orbit 16s linear infinite;
   --animate-orbit-venus: orbit 24s linear infinite;
   --animate-orbit-earth: orbit 32s linear infinite;
@@ -55,6 +56,16 @@
     }
     50% {
       transform: translateY(-16px);
+    }
+  }
+
+  @keyframes float-soft {
+    0%,
+    100% {
+      transform: translateY(0);
+    }
+    50% {
+      transform: translateY(-6px);
     }
   }
 

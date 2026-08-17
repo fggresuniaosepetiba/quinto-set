@@ -1,9 +1,9 @@
-const easeInOutCubic = (t: number) =>
-  t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2;
+const easeInOutQuart = (t: number) =>
+  t < 0.5 ? 8 * t * t * t * t : 1 - Math.pow(-2 * t + 2, 4) / 2;
 
 export function smoothScrollTo(
   targetY: number,
-  { duration = 300 }: { duration?: number } = {},
+  { duration }: { duration?: number } = {},
 ) {
   const reducedMotion = window.matchMedia(
     "(prefers-reduced-motion: reduce)",
@@ -19,6 +19,8 @@ export function smoothScrollTo(
 
   if (Math.abs(delta) < 1) return;
 
+  const clamped = duration ?? Math.min(1200, Math.max(600, Math.abs(delta) * 0.5));
+
   const start = performance.now();
   let raf = 0;
 
@@ -33,8 +35,8 @@ export function smoothScrollTo(
 
   const step = (now: number) => {
     const elapsed = now - start;
-    const progress = Math.min(elapsed / duration, 1);
-    const y = startY + delta * easeInOutCubic(progress);
+    const progress = Math.min(elapsed / clamped, 1);
+    const y = startY + delta * easeInOutQuart(progress);
 
     window.scrollTo({ top: y, behavior: "instant" });
 
