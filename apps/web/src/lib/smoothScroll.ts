@@ -1,5 +1,7 @@
-const easeInOutCubic = (t: number) =>
-  t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2;
+const MAX_SPEED = 3200;
+const MAX_DURATION = 5000;
+
+const easeInOutSine = (t: number) => -(Math.cos(Math.PI * t) - 1) / 2;
 
 export function smoothScrollTo(
   targetY: number,
@@ -19,9 +21,13 @@ export function smoothScrollTo(
 
   if (Math.abs(delta) < 1) return;
 
-  const clamped = duration ?? Math.min(4000, Math.max(600, Math.abs(delta) * 0.8));
+  const clamped =
+    duration ??
+    Math.min(MAX_DURATION, Math.max(600, (Math.abs(delta) / MAX_SPEED) * 1000));
 
   const start = performance.now();
+  let lastNow = start;
+  let lastY = startY;
   let raf = 0;
 
   const cancel = () => {
@@ -34,13 +40,20 @@ export function smoothScrollTo(
   window.addEventListener("touchstart", cancel, { passive: true });
 
   const step = (now: number) => {
+    const dt = Math.min((now - lastNow) / 1000, 0.1);
+    lastNow = now;
+
     const elapsed = now - start;
     const progress = Math.min(elapsed / clamped, 1);
-    const y = startY + delta * easeInOutCubic(progress);
+    const eased = startY + delta * easeInOutSine(progress);
+
+    const maxStep = MAX_SPEED * dt;
+    const y = Math.max(lastY - maxStep, Math.min(lastY + maxStep, eased));
+    lastY = y;
 
     window.scrollTo({ top: y, behavior: "instant" });
 
-    if (progress < 1) {
+    if (progress < 1 || Math.abs(y - (startY + delta)) >= 1) {
       raf = requestAnimationFrame(step);
     } else {
       cancel();
