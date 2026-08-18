@@ -31,4 +31,8 @@ export class LeadService {
     };
     return this.repository.save(lead);
   }
+
+  async list(): Promise<Lead[]> {
+    return this.repository.list();
+  }
 }

@@ -11,7 +11,8 @@ const envSchema = z.object({
   PORT: z.coerce.number().int().positive().default(3001),
   DATABASE_URL: z
     .string()
-    .default("postgres://quinto_set:quinto_set@localhost:5432/quinto_set"),
+    .default("postgres://quinto_set:quinto_set@localhost:5433/quinto_set"),
+  STORAGE: z.enum(["postgres", "memory"]).default("postgres"),
   LOG_LEVEL: z
     .enum(["fatal", "error", "warn", "info", "debug", "trace", "silent"])
     .default("info"),

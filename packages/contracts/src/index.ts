@@ -91,3 +91,26 @@ export const sponsorSchema = z.object({
 
 export type SponsorInput = z.input<typeof sponsorSchema>;
 export type Sponsor = z.infer<typeof sponsorSchema>;
+
+export const leadDataSchema = z.union([
+  contactSchema,
+  enrollmentSchema,
+  sponsorSchema,
+]);
+
+export type LeadData = z.infer<typeof leadDataSchema>;
+
+export const leadSchema = z.object({
+  id: z.string(),
+  type: leadTypeSchema,
+  data: leadDataSchema,
+  createdAt: z.string(),
+});
+
+export type Lead = z.infer<typeof leadSchema>;
+
+export const leadsResponseSchema = z.object({
+  leads: z.array(leadSchema),
+});
+
+export type LeadsResponse = z.infer<typeof leadsResponseSchema>;

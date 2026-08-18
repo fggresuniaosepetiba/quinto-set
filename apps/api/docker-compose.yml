@@ -8,7 +8,7 @@ services:
       POSTGRES_PASSWORD: quinto_set
       POSTGRES_DB: quinto_set
     ports:
-      - "5432:5432"
+      - "5433:5432"
     volumes:
       - quinto_set_pgdata:/var/lib/postgresql/data
 
