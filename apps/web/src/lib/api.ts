@@ -1,4 +1,4 @@
-import type { CreatedLead } from "@quinto-set/contracts";
+import type { CreatedLead, LeadsResponse } from "@quinto-set/contracts";
 
 const API_BASE_URL =
   process.env.NEXT_PUBLIC_API_URL ?? "http://localhost:3001";
@@ -27,4 +27,15 @@ export async function postLead<T = CreatedLead>(
   }
 
   return response.json() as Promise<T>;
+}
+
+export async function getLeads(): Promise<LeadsResponse["leads"]> {
+  const response = await fetch(`${API_BASE_URL}/leads`);
+
+  if (!response.ok) {
+    throw new Error("Não foi possível carregar os leads.");
+  }
+
+  const body = (await response.json()) as LeadsResponse;
+  return body.leads;
 }
