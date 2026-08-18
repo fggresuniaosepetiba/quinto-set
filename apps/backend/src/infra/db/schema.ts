@@ -9,3 +9,12 @@ export const leads = pgTable("leads", {
 });
 
 export type LeadRow = typeof leads.$inferSelect;
+
+export const admins = pgTable("admins", {
+  id: text("id").primaryKey(),
+  username: text("username").notNull().unique(),
+  passwordHash: text("password_hash").notNull(),
+  createdAt: timestamp("created_at", { withTimezone: true }).notNull(),
+});
+
+export type AdminRow = typeof admins.$inferSelect;
