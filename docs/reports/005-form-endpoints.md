@@ -11,7 +11,7 @@ Implementar os endpoints de formulários na API e conectar os formulários do we
 
 ## Entregas
 
-### API (`apps/api`)
+### API (`apps/backend`)
 
 | Arquivo | Responsabilidade |
 | --- | --- |
@@ -46,7 +46,7 @@ Implementar os endpoints de formulários na API e conectar os formulários do we
 ## Evidências (verificadas)
 
 - `npm run test` → 2 suites, **7/7 testes passando** (health + forms).
-- `npm run typecheck` → OK em `@quinto-set/api` e `@quinto-set/web`.
+- `npm run typecheck` → OK em `@quinto-set/backend` e `@quinto-set/web`.
 - `npm run lint --workspace @quinto-set/web` → **0 erros, 0 warnings**.
 - `npm run build --workspace @quinto-set/web` → build Next.js 16.3.0 OK, 9 páginas estáticas.
 - Smoke test real (API rodando): `POST /contacts` válido → **201** com `{id, type, createdAt}`; `POST` inválido → **400**; `GET /health` → `{"status":"ok",...}`.

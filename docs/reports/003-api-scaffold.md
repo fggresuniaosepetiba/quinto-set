@@ -10,7 +10,7 @@ Criar o backend da plataforma com arquitetura em camadas, validação compartilh
 
 ## Execução
 
-1. **`apps/api` (`@quinto-set/api`):** Express 5 + TypeScript 7 (ESM, `"type": "module"`), arquitetura em camadas:
+1. **`apps/backend` (`@quinto-set/backend`):** Express 5 + TypeScript 7 (ESM, `"type": "module"`), arquitetura em camadas:
    - `src/config/`: `env.ts` (validação Zod), `logger.ts` (pino), `container.ts` (tsyringe DI + reflect-metadata).
    - `src/domain/entities/service-status.ts`: tipo `ServiceStatus`.
    - `src/application/services/health-service.ts`: `HealthService` `@injectable`.
@@ -23,8 +23,8 @@ Criar o backend da plataforma com arquitetura em camadas, validação compartilh
 
 ## Verificação (evidência)
 
-- `npm run test --workspace @quinto-set/api`: **1 suite / 1 teste passando** (`GET /health` → 200 + corpo JSON válido).
-- `npm run build --workspace @quinto-set/api`: OK.
+- `npm run test --workspace @quinto-set/backend`: **1 suite / 1 teste passando** (`GET /health` → 200 + corpo JSON válido).
+- `npm run build --workspace @quinto-set/backend`: OK.
 - Execução do build com `PORT=3099`:
   ```
   {"status":"ok","timestamp":"2026-08-13T16:06:23.921Z","uptime":4.03}

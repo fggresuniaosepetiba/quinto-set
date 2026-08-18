@@ -9,9 +9,9 @@ Site institucional da **Quinto Set Escolinha de Vôlei** (Cesarão, Rio de Janei
 | Camada | Tecnologia | Pasta |
 | --- | --- | --- |
 | **Web** | Next.js 16 · React 19 · TypeScript 7 · Tailwind CSS 4 | `apps/web` |
-| **API** | Express 5 · TypeScript 7 · Drizzle ORM · tsyringe · pino | `apps/api` |
+| **API** | Express 5 · TypeScript 7 · Drizzle ORM · tsyringe · pino | `apps/backend` |
 | **Contracts** | Zod 4 (schemas compartilhados web ↔ api) | `packages/contracts` |
-| **Testes API** | Jest 30 · @swc/jest · Supertest | `apps/api/tests` |
+| **Testes API** | Jest 30 · @swc/jest · Supertest | `apps/backend/tests` |
 
 ## Estrutura
 
@@ -43,17 +43,17 @@ npm run dev
 
 # ou apenas um deles
 npm run dev:web   # só o site web
-npm run dev:api   # só a API (tsx watch)
+npm run dev:backend   # só a API (tsx watch)
 ```
 
 ### API com banco de dados (opcional)
 
 ```bash
 # sobe o Postgres local (porta 5432)
-docker compose -f apps/api/docker-compose.yml up -d
+docker compose -f apps/backend/docker-compose.yml up -d
 ```
 
-Variáveis de ambiente da API: copie `apps/api/.env.example` para `apps/api/.env` e ajuste os valores (o arquivo `.env` é ignorado pelo git).
+Variáveis de ambiente da API: copie `apps/backend/.env.example` para `apps/backend/.env` e ajuste os valores (o arquivo `.env` é ignorado pelo git).
 
 ## Scripts
 
@@ -61,7 +61,7 @@ Variáveis de ambiente da API: copie `apps/api/.env.example` para `apps/api/.env
 | --- | --- |
 | `npm run dev` | Web + API em modo dev, juntos (concurrently) |
 | `npm run dev:web` | Só o site web (`next dev`, porta 3000) |
-| `npm run dev:api` | Só a API (tsx watch, porta 3001) |
+| `npm run dev:backend` | Só a API (tsx watch, porta 3001) |
 | `npm run build` | Build de produção do web |
 | `npm run start` | Serve o build de produção do web |
 | `npm run lint` | ESLint em todos os workspaces |
@@ -71,9 +71,9 @@ Por workspace:
 
 ```bash
 npm run dev --workspace @quinto-set/web
-npm run test --workspace @quinto-set/api
-npm run build --workspace @quinto-set/api   # compila TS -> dist/
-npm run typecheck --workspace @quinto-set/api
+npm run test --workspace @quinto-set/backend
+npm run build --workspace @quinto-set/backend   # compila TS -> dist/
+npm run typecheck --workspace @quinto-set/backend
 ```
 
 ## Endpoints
@@ -102,7 +102,7 @@ Exemplo de resposta de health:
 ## Testes
 
 ```bash
-npm run test --workspace @quinto-set/api
+npm run test --workspace @quinto-set/backend
 ```
 
 ## Deploy

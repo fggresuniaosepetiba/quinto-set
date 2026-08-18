@@ -20,7 +20,7 @@
 ## Estrutura em camadas
 
 ```
-apps/api/
+apps/backend/
 ├── src/
 │   ├── config/                      # Infra de configuração
 │   │   ├── env.ts                   #   Validação de variáveis de ambiente (Zod)
@@ -138,7 +138,7 @@ Se a validação falhar, o processo aborta com mensagem de erro (fail-fast).
 ## Testes
 
 ```bash
-npm run test --workspace @quinto-set/api
+npm run test --workspace @quinto-set/backend
 ```
 
 O Jest usa `@swc/jest` para transformar TypeScript (com suporte a decorators), e o `moduleNameMapper` remove o sufixo `.js` dos imports relativos (compat ESM). Testes atuais (7/7 passando):
@@ -149,8 +149,8 @@ O Jest usa `@swc/jest` para transformar TypeScript (com suporte a decorators), e
 ## Build e execução
 
 ```bash
-npm run build --workspace @quinto-set/api   # tsc -p tsconfig.build.json → dist/
-npm run start --workspace @quinto-set/api   # node dist/index.js
+npm run build --workspace @quinto-set/backend   # tsc -p tsconfig.build.json → dist/
+npm run start --workspace @quinto-set/backend   # node dist/index.js
 ```
 
 Comportamento observado (evidência):

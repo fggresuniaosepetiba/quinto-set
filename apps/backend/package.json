@@ -1,5 +1,5 @@
 {
-  "name": "@quinto-set/api",
+  "name": "@quinto-set/backend",
   "version": "1.0.0",
   "private": true,
   "type": "module",
