@@ -14,4 +14,8 @@ export class InMemoryLeadRepository implements LeadRepository {
   async list(): Promise<Lead[]> {
     return [...this.leads];
   }
+
+  clear(): void {
+    this.leads.length = 0;
+  }
 }
