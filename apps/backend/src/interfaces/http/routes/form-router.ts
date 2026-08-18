@@ -22,9 +22,7 @@ export function formRouter(
   );
   router.get(
     "/leads",
-    ...(requireLeadsAuth
-      ? [requireLeadsAuth]
-      : []),
+    ...(requireLeadsAuth ? [requireLeadsAuth] : []),
     (req: Request, res: Response, next: NextFunction) =>
       void controller.list(req, res, next),
   );

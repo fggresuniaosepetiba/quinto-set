@@ -7,9 +7,7 @@ import { InMemoryLeadRepository } from "../src/application/repositories/in-memor
 
 describe("POST /auth/login", () => {
   beforeEach(async () => {
-    container
-      .resolve(InMemoryAdminRepository)
-      .clear();
+    container.resolve(InMemoryAdminRepository).clear();
     container.resolve(InMemoryLeadRepository).clear();
     await container.resolve(AuthService).seedAdmin("admin", "secret123");
   });
