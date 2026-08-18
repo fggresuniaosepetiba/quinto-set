@@ -1,3 +1,5 @@
+name: quinto-set
+
 services:
   db:
     image: postgres:17-alpine
@@ -14,3 +16,4 @@ services:
 
 volumes:
   quinto_set_pgdata:
+    name: quinto_set_pgdata
