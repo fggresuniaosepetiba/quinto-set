@@ -1,11 +1,11 @@
 "use client";
 
-import { useEffect, useRef } from "react";
+import { useCallback, useEffect, useRef } from "react";
 import { ArrowRight, ChevronDown, Play, Medal, HeartHandshake } from "lucide-react";
 import { ButtonLink } from "@/components/ui/Button";
 import { Logo } from "@/components/ui/Logo";
 import { img } from "@/data/images";
-import { smoothScrollTo } from "@/lib/smoothScroll";
+import { smoothScrollToElement } from "@/lib/smoothScroll";
 
 export function Hero() {
   const bgRef = useRef<HTMLDivElement | null>(null);
@@ -31,6 +31,15 @@ export function Hero() {
       cancelAnimationFrame(raf);
     };
   }, []);
+
+  const handleScrollDown = useCallback(
+    (e: React.MouseEvent<HTMLAnchorElement>) => {
+      e.preventDefault();
+      const target = document.querySelector("footer");
+      if (target) smoothScrollToElement(target as HTMLElement);
+    },
+    [],
+  );
 
   return (
     <section className="relative flex min-h-[100svh] items-center overflow-hidden bg-navy-950 pb-20 pt-10">
@@ -132,17 +141,11 @@ export function Hero() {
 
       <a
         href="#footer"
-        aria-label="Rolar para o rodapé"
-        onClick={(e) => {
-          e.preventDefault();
-          const footer = document.getElementById("footer");
-          if (footer) {
-            smoothScrollTo(footer.getBoundingClientRect().top + window.scrollY);
-          }
-        }}
+        onClick={handleScrollDown}
+        aria-label="Rolar para o footer"
         className="absolute bottom-6 left-1/2 -translate-x-1/2 text-cream-100/60 transition-colors hover:text-gold-400"
       >
-        <ChevronDown className="h-7 w-7 animate-float-soft" />
+        <ChevronDown className="h-7 w-7 animate-bounce" />
       </a>
 
       <div

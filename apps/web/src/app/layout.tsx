@@ -44,6 +44,13 @@ export const metadata: Metadata = {
     "escolinha gratuita de volei",
     "Quinto Set Escolinha de Vôlei",
   ],
+  icons: {
+    icon: [
+      { url: "/favicon.svg", type: "image/svg+xml" },
+      { url: "/logo-quinto-set.png", sizes: "any" },
+    ],
+    apple: "/logo-quinto-set.png",
+  },
   openGraph: {
     type: "website",
     locale: "pt_BR",
