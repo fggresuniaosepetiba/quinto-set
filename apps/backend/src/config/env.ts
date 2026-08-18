@@ -17,6 +17,10 @@ const envSchema = z.object({
     .enum(["fatal", "error", "warn", "info", "debug", "trace", "silent"])
     .default("info"),
   CORS_ORIGIN: z.string().default("*"),
+  AUTH_SECRET: z.string().min(1).default("dev-secret-change-me"),
+  ADMIN_USERNAME: z.string().min(1).default("admin"),
+  ADMIN_PASSWORD: z.string().min(1).default("quinto-set"),
+  AUTH_TOKEN_TTL: z.coerce.number().int().positive().default(604800),
 });
 
 const parsed = envSchema.safeParse(process.env);

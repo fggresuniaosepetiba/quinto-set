@@ -34,8 +34,8 @@ npm run dev:backend                          # API em http://localhost:3001
 | Build | `npm run build --workspace @quinto-set/web` | `npm run build --workspace @quinto-set/backend` |
 | Start | `npm run start --workspace @quinto-set/web` | `npm run start --workspace @quinto-set/backend` |
 | Typecheck | `npm run typecheck --workspace @quinto-set/web` | `npm run typecheck --workspace @quinto-set/backend` |
-| Testes | — (a configurar) | `npm run test --workspace @quinto-set/backend` |
-| Lint | `npm run lint --workspace @quinto-set/web` | — (a configurar) |
+| Testes | `npm run test --workspace @quinto-set/web` | `npm run test --workspace @quinto-set/backend` |
+| Lint | `npm run lint --workspace @quinto-set/web` | `npm run lint --workspace @quinto-set/backend` |
 
 Na raiz: `npm run dev` (web + API juntos via `concurrently`), `npm run lint`, `npm run test`, `npm run build`, `npm run start` rodam agregados nos workspaces.
 
@@ -81,13 +81,38 @@ A `config/env.ts` valida com Zod. Se adicionar variável nova, atualize o schema
 | Variável | Default | Descrição |
 | --- | --- | --- |
 | `PORT` | `3001` | Porta HTTP da API |
-| `DATABASE_URL` | `postgres://quinto_set:...` | URL do Postgres (por enquanto não usado) |
+| `DATABASE_URL` | `postgres://quinto_set:...` | URL do Postgres |
 | `LOG_LEVEL` | `info` | Nível do pino |
 | `CORS_ORIGIN` | `*` | Origens liberadas no CORS (`*` = qualquer; vírgula = lista) |
+| `AUTH_SECRET` | `dev-secret-change-me` | Segredo usado para assinar o JWT do login admin |
+| `ADMIN_USERNAME` | `admin` | Usuário admin criado pelo seed |
+| `ADMIN_PASSWORD` | `quinto-set` | Senha do admin criada pelo seed |
+| `AUTH_TOKEN_TTL` | `604800` | Validade do token/sessão em segundos (default 7 dias) |
+
+## API — login do admin
+
+- O admin é criado no banco pelo seed, usando `ADMIN_USERNAME`/`ADMIN_PASSWORD`:
+
+  ```bash
+  npm run db:seed --workspace @quinto-set/backend
+  ```
+
+  (a senha é salva como hash scrypt; o seed é idempotente e atualiza a senha se as env mudarem)
+- Login: `POST /auth/login` com `{ username, password }` → `200 { token, expiresAt }` ou `401 { error: "invalid_credentials" }`.
+- As rotas protegidas exigem `Authorization: Bearer <token>`. Hoje, `GET /leads` é protegida.
+
+## Web — sessão do admin (BFF)
+
+- O site usa route handlers (`apps/web/src/app/api/...`) como proxy para a API, mantendo o token JWT em um cookie httpOnly (`admin_session`).
+- `POST /api/auth/login` chama a API, valida e seta o cookie. `POST /api/auth/logout` remove. `GET /api/leads` repassa o token e devolve os leads.
+- `src/proxy.ts` (Next.js proxy/middleware) redireciona `/admin/*` (exceto `/admin/login`) para o login quando não há cookie — guarda otimista; a validação real do token ocorre no BFF/API.
+- A página de login fica em `/admin/login`; o painel em `/admin`.
+- `API_URL` (server-side) é a URL base usada pelos route handlers — default `http://localhost:3001`. Modelo em `apps/web/.env.example`.
 
 ## Web — variáveis de ambiente
 
-- `NEXT_PUBLIC_API_URL` (default `http://localhost:3001`) — URL base que os formulários usam para chamar a API. Modelo em `apps/web/.env.example`.
+- `API_URL` (default `http://localhost:3001`) — URL da API usada pelos route handlers do BFF (server-side).
+- `NEXT_PUBLIC_API_URL` (default `http://localhost:3001`) — URL base que os formulários públicos usam para chamar a API. Modelo em `apps/web/.env.example`.
 
 ## API — como funcionam os formulários
 

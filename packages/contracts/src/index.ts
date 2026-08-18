@@ -114,3 +114,17 @@ export const leadsResponseSchema = z.object({
 });
 
 export type LeadsResponse = z.infer<typeof leadsResponseSchema>;
+
+export const loginInputSchema = z.object({
+  username: z.string().trim().min(1, { message: "Informe o usuário." }),
+  password: z.string().min(1, { message: "Informe a senha." }),
+});
+
+export type LoginInput = z.infer<typeof loginInputSchema>;
+
+export const authResponseSchema = z.object({
+  token: z.string(),
+  expiresAt: z.string().datetime(),
+});
+
+export type AuthResponse = z.infer<typeof authResponseSchema>;

@@ -29,9 +29,19 @@ export async function postLead<T = CreatedLead>(
   return response.json() as Promise<T>;
 }
 
-export async function getLeads(): Promise<LeadsResponse["leads"]> {
-  const response = await fetch(`${API_BASE_URL}/leads`);
+export class UnauthorizedError extends Error {
+  constructor() {
+    super("Não autorizado.");
+    this.name = "UnauthorizedError";
+  }
+}
 
+export async function getLeads(): Promise<LeadsResponse["leads"]> {
+  const response = await fetch("/api/leads");
+
+  if (response.status === 401) {
+    throw new UnauthorizedError();
+  }
   if (!response.ok) {
     throw new Error("Não foi possível carregar os leads.");
   }

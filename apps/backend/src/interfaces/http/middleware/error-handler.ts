@@ -1,6 +1,7 @@
 import type { ErrorRequestHandler } from "express";
 import { ZodError } from "zod";
 import { logger } from "../../../config/logger.js";
+import { UnauthorizedError } from "./require-auth.js";
 
 export const errorHandler: ErrorRequestHandler = (err, _req, res, _next) => {
   if (err instanceof ZodError) {
@@ -11,6 +12,16 @@ export const errorHandler: ErrorRequestHandler = (err, _req, res, _next) => {
         message: issue.message,
       })),
     });
+    return;
+  }
+
+  if (err instanceof UnauthorizedError) {
+    res.status(401).json({ error: "unauthorized" });
+    return;
+  }
+
+  if (err instanceof Error && err.message === "invalid_credentials") {
+    res.status(401).json({ error: "invalid_credentials" });
     return;
   }
 
