@@ -1,9 +1,10 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { Download, Loader2, RefreshCw } from "lucide-react";
+import { useRouter } from "next/navigation";
+import { Download, Loader2, LogOut, RefreshCw } from "lucide-react";
 import type { Lead } from "@quinto-set/contracts";
-import { getLeads } from "@/lib/api";
+import { getLeads, UnauthorizedError } from "@/lib/api";
 import { downloadLeadsWorkbook } from "@/lib/exportLeads";
 
 type LeadType = Lead["type"];
@@ -15,6 +16,7 @@ const TYPE_LABELS: Record<LeadType, string> = {
 };
 
 export default function AdminPage() {
+  const router = useRouter();
   const [leads, setLeads] = useState<Lead[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -30,13 +32,16 @@ export default function AdminPage() {
         }
       })
       .catch((err) => {
-        if (!cancelled) {
-          setError(
-            err instanceof Error
-              ? err.message
-              : "Não foi possível carregar os leads.",
-          );
+        if (cancelled) return;
+        if (err instanceof UnauthorizedError) {
+          router.replace("/admin/login");
+          return;
         }
+        setError(
+          err instanceof Error
+            ? err.message
+            : "Não foi possível carregar os leads.",
+        );
       })
       .finally(() => {
         if (!cancelled) {
@@ -46,7 +51,7 @@ export default function AdminPage() {
     return () => {
       cancelled = true;
     };
-  }, []);
+  }, [router]);
 
   const handleRefresh = async () => {
     setLoading(true);
@@ -54,6 +59,10 @@ export default function AdminPage() {
       setLeads(await getLeads());
       setError(null);
     } catch (err) {
+      if (err instanceof UnauthorizedError) {
+        router.replace("/admin/login");
+        return;
+      }
       setError(
         err instanceof Error
           ? err.message
@@ -71,6 +80,12 @@ export default function AdminPage() {
     } finally {
       setExporting(false);
     }
+  };
+
+  const handleLogout = async () => {
+    await fetch("/api/auth/logout", { method: "POST" });
+    router.replace("/admin/login");
+    router.refresh();
   };
 
   const byType = (type: LeadType) => leads.filter((lead) => lead.type === type);
@@ -109,6 +124,14 @@ export default function AdminPage() {
                 <Download className="h-4 w-4" />
               )}
               {exporting ? "Gerando..." : "Exportar Excel"}
+            </button>
+            <button
+              type="button"
+              onClick={() => void handleLogout()}
+              className="inline-flex items-center gap-2 rounded-lg border border-navy-900/20 bg-white px-4 py-2.5 font-display text-sm font-semibold uppercase tracking-wider text-navy-900 transition-colors hover:bg-cream-100"
+            >
+              <LogOut className="h-4 w-4" />
+              Sair
             </button>
           </div>
         </div>
