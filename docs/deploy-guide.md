@@ -45,7 +45,7 @@ A API ainda **não tem deploy configurado**. Opções recomendadas:
 
 - [ ] `npm run lint` sem erros
 - [ ] `npm run test` passando
-- [ ] `npm run build` (web) e `npm run build --workspace @quinto-set/api` OK
+- [ ] `npm run build` (web) e `npm run build --workspace @quinto-set/backend` OK
 - [ ] Root Directory = `apps/web` na Vercel
 - [ ] Variáveis de ambiente da API configuradas
 - [ ] Domínio confirmado e `siteConfig.url` atualizado

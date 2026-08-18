@@ -34,7 +34,7 @@ O TypeScript 7 (instalado nos workspaces) **removeu** a opção `baseUrl` (erros
 
 ### Decisão
 
-- `apps/api`: **sem aliases de caminho** — todas as imports são **relativas** (`../../config/container.js`, etc.).
+- `apps/backend`: **sem aliases de caminho** — todas as imports são **relativas** (`../../config/container.js`, etc.).
 - `apps/web`: mantém o alias `@/*` (Next.js já resolve nativamente, sem `baseUrl`).
 
 ### Consequências
@@ -96,7 +96,7 @@ O app web existia como raiz do repositório. Foi necessário adicionar uma API s
 ### Decisão
 
 Reestruturar como monorepo:
-- `apps/web` (Next.js), `apps/api` (Express), `packages/contracts` (Zod).
+- `apps/web` (Next.js), `apps/backend` (Express), `packages/contracts` (Zod).
 - Root `package.json` com `workspaces: ["apps/*", "packages/*"]` e scripts agregadores.
 - Dependências hoisted na raiz; `node_modules` local apenas em caso de conflito (ex.: TypeScript).
 
@@ -104,7 +104,7 @@ Reestruturar como monorepo:
 
 - Instalação única na raiz (`npm install`).
 - Deploy na Vercel exige **Root Directory = `apps/web`**.
-- TypeScript 7 fica duplicado em `apps/web` e `apps/api` porque o `typescript-eslint` (na raiz, via `eslint-config-next`) ainda usa TS 6.0.3.
+- TypeScript 7 fica duplicado em `apps/web` e `apps/backend` porque o `typescript-eslint` (na raiz, via `eslint-config-next`) ainda usa TS 6.0.3.
 
 ## ADR-006 — Tipografia de commits: conventional commits em inglês
 
@@ -212,9 +212,9 @@ Com o monorepo, era preciso abrir dois terminais para rodar web e API em desenvo
 
 Usar **concurrently** (devDependency da raiz) para rodar web (`next dev`, porta 3000) e API (`tsx watch`, porta 3001) em paralelo:
 
-- `dev` → `concurrently -n web,api -c blue,green "npm:dev:web" "npm:dev:api"`
+- `dev` → `concurrently -n web,backend -c blue,green "npm:dev:web" "npm:dev:backend"`
 - `dev:web` → só o site web
-- `dev:api` → só a API (mantido)
+- `dev:backend` → só a API (mantido)
 
 ### Consequências
 

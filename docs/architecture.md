@@ -11,7 +11,7 @@ O repositório é um monorepo com npm workspaces. Todas as dependências são **
 quinto-set/
 ├── apps/
 │   ├── web/        @quinto-set/web     — Next.js 16, React 19, Tailwind 4
-│   └── api/        @quinto-set/api     — Express 5, Drizzle, tsyringe, pino
+│   └── api/        @quinto-set/backend     — Express 5, Drizzle, tsyringe, pino
 ├── packages/
 │   └── contracts/  @quinto-set/contracts — Zod 4 schemas compartilhados
 ├── docs/                                — documentação
@@ -21,7 +21,7 @@ quinto-set/
 ## Fluxo de dados (atual)
 
 ```
-[Web: apps/web]  --chama--  [API: apps/api]  --persiste--  [em memória (Postgres: futuro)]
+[Web: apps/web]  --chama--  [API: apps/backend]  --persiste--  [em memória (Postgres: futuro)]
        |                     (camadas, ver backend-architecture)
        |
        └── usa schemas Zod de [packages/contracts] para validar formulários
@@ -38,7 +38,7 @@ Os formulários do site (contato, matrícula, patrocínio) chamam `POST /contact
 | `src/data/` | Dados estáticos (site, diretores, patrocinadores, imagens) |
 | `src/lib/` | Utilitários (validação, helpers, `useFormState`) |
 
-## Camadas do projeto API (`apps/api`)
+## Camadas do projeto API (`apps/backend`)
 
 ```
 src/
@@ -71,5 +71,5 @@ O `package.json` do contracts aponta `main`/`types`/`exports` direto para `./src
 
 ## Testes
 
-- **API:** Jest 30 + `@swc/jest` + Supertest (`apps/api/tests/health.test.ts` e `forms.test.ts` — 7 testes).
+- **API:** Jest 30 + `@swc/jest` + Supertest (`apps/backend/tests/health.test.ts` e `forms.test.ts` — 7 testes).
 - **Web:** lint via ESLint (`eslint-config-next` core-web-vitals) limpo. Testes de componente ainda não configurados (ver [frontend-todo](frontend-todo.md)).

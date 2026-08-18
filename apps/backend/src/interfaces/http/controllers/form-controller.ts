@@ -26,4 +26,13 @@ export class FormController {
       next(error);
     }
   }
+
+  async list(req: Request, res: Response, next: NextFunction): Promise<void> {
+    try {
+      const leads = await this.leadService.list();
+      res.status(200).json({ leads });
+    } catch (error) {
+      next(error);
+    }
+  }
 }

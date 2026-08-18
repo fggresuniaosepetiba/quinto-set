@@ -13,28 +13,28 @@ Para rodar apenas um deles:
 
 ```bash
 npm run dev:web    # só o site web (porta 3000)
-npm run dev:api    # só a API (porta 3001)
+npm run dev:backend    # só a API (porta 3001)
 ```
 
 Para a API com banco local:
 
 ```bash
-docker compose -f apps/api/docker-compose.yml up -d
-cp apps/api/.env.example apps/api/.env   # e ajuste se necessário
-npm run dev:api                          # API em http://localhost:3001
+docker compose -f apps/backend/docker-compose.yml up -d
+cp apps/backend/.env.example apps/backend/.env   # e ajuste se necessário
+npm run dev:backend                          # API em http://localhost:3001
 ```
 
 > O `.env` não é commitado. Só o `.env.example` é versionado.
 
 ## Comandos por workspace
 
-| Ação | Web (`@quinto-set/web`) | API (`@quinto-set/api`) |
+| Ação | Web (`@quinto-set/web`) | API (`@quinto-set/backend`) |
 | --- | --- | --- |
-| Dev | `npm run dev --workspace @quinto-set/web` | `npm run dev:api` (raiz) |
-| Build | `npm run build --workspace @quinto-set/web` | `npm run build --workspace @quinto-set/api` |
-| Start | `npm run start --workspace @quinto-set/web` | `npm run start --workspace @quinto-set/api` |
-| Typecheck | `npm run typecheck --workspace @quinto-set/web` | `npm run typecheck --workspace @quinto-set/api` |
-| Testes | — (a configurar) | `npm run test --workspace @quinto-set/api` |
+| Dev | `npm run dev --workspace @quinto-set/web` | `npm run dev:backend` (raiz) |
+| Build | `npm run build --workspace @quinto-set/web` | `npm run build --workspace @quinto-set/backend` |
+| Start | `npm run start --workspace @quinto-set/web` | `npm run start --workspace @quinto-set/backend` |
+| Typecheck | `npm run typecheck --workspace @quinto-set/web` | `npm run typecheck --workspace @quinto-set/backend` |
+| Testes | — (a configurar) | `npm run test --workspace @quinto-set/backend` |
 | Lint | `npm run lint --workspace @quinto-set/web` | — (a configurar) |
 
 Na raiz: `npm run dev` (web + API juntos via `concurrently`), `npm run lint`, `npm run test`, `npm run build`, `npm run start` rodam agregados nos workspaces.
@@ -70,7 +70,7 @@ Na raiz: `npm run dev` (web + API juntos via `concurrently`), `npm run lint`, `n
 4. Registre no container em `src/config/container.ts`.
 5. Crie o controller em `src/interfaces/http/controllers/`.
 6. Crie/atualize a rota em `src/interfaces/http/routes/` e monte em `createApp` (`src/interfaces/http/app.ts`).
-7. Adicione testes em `apps/api/tests/`.
+7. Adicione testes em `apps/backend/tests/`.
 
 Erros de validação (Zod) são convertidos em `400 { error: "invalid_input", issues }` pelo `error-handler` central — não precisa tratar ZodError em cada controller.
 
@@ -98,7 +98,7 @@ A `config/env.ts` valida com Zod. Se adicionar variável nova, atualize o schema
 ## Testes
 
 ```bash
-npm run test --workspace @quinto-set/api
+npm run test --workspace @quinto-set/backend
 ```
 
 O Jest da API usa `@swc/jest` (suporta decorators) e `transformIgnorePatterns` para transformar `@quinto-set/contracts` (que está em `node_modules`).

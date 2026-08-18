@@ -12,7 +12,7 @@
   - Express 5 + TS 7 em camadas, tsyringe, pino, Zod, endpoint `GET /health`, teste Jest/Supertest 1/1 passando.
 - [x] **Fase 4 — Documentação** (`docs/README/…`).
   - README, `docs/*`, relatórios por fase, changelog.
-- [x] **`npm run dev` unificado** — web + API em paralelo via `concurrently` (root `dev`; novos `dev:web`/`dev:api`).
+- [x] **`npm run dev` unificado** — web + API em paralelo via `concurrently` (root `dev`; novos `dev:web`/`dev:backend`).
 - [x] **Endpoints de formulários** — `POST /contacts`, `POST /enrollments`, `POST /sponsors` com validação Zod (400 `invalid_input`) e persistência em memória (repositório com interface para trocar por Drizzle).
 - [x] **Web → API** — formulários de matrícula/contato/patrocínio enviam para a API (`src/lib/api.ts` + `NEXT_PUBLIC_API_URL`).
 - [x] **Lint do web limpo** — erro `Navbar.tsx:16` corrigido + 12 warnings `<img>` → `next/image`.

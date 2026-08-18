@@ -1,6 +1,6 @@
 # Backend — Todo
 
-> Pendências específicas da API (`apps/api`). Última atualização: 2026-08-14.
+> Pendências específicas da API (`apps/backend`). Última atualização: 2026-08-14.
 
 ## Feito
 

@@ -16,6 +16,10 @@ export function formRouter(controller: FormController): Router {
     "/sponsors",
     (req, res, next) => void controller.create("sponsor", req, res, next),
   );
+  router.get(
+    "/leads",
+    (req, res, next) => void controller.list(req, res, next),
+  );
 
   return router;
 }
