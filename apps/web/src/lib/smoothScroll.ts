@@ -1,5 +1,5 @@
-const MAX_SPEED = 1200;
-const MAX_DURATION = 5000;
+const MAX_SPEED = 4000;
+const MAX_DURATION = 500;
 
 const easeInOutSine = (t: number) => -(Math.cos(Math.PI * t) - 1) / 2;
 
@@ -23,7 +23,7 @@ export function smoothScrollTo(
 
   const clamped =
     duration ??
-    Math.min(MAX_DURATION, Math.max(600, (Math.abs(delta) / MAX_SPEED) * 1000));
+    Math.min(MAX_DURATION, Math.max(200, (Math.abs(delta) / MAX_SPEED) * 1000));
 
   const start = performance.now();
   let lastNow = start;
@@ -61,4 +61,13 @@ export function smoothScrollTo(
   };
 
   raf = requestAnimationFrame(step);
+}
+
+export function smoothScrollToElement(
+  element: HTMLElement,
+  opts?: { duration?: number },
+) {
+  const rect = element.getBoundingClientRect();
+  const targetY = window.scrollY + rect.top;
+  smoothScrollTo(targetY, opts);
 }
