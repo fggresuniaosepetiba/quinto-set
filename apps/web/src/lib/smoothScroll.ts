@@ -1,4 +1,4 @@
-const MAX_SPEED = 3200;
+const MAX_SPEED = 1200;
 const MAX_DURATION = 5000;
 
 const easeInOutSine = (t: number) => -(Math.cos(Math.PI * t) - 1) / 2;
