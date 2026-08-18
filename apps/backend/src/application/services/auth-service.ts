@@ -32,7 +32,10 @@ export class AuthService {
 
   verifyToken(token: string): AuthTokenPayload {
     const payload = jwt.verify(token, env.AUTH_SECRET) as jwt.JwtPayload;
-    if (typeof payload.sub !== "string" || typeof payload.username !== "string") {
+    if (
+      typeof payload.sub !== "string" ||
+      typeof payload.username !== "string"
+    ) {
       throw new Error("invalid_token");
     }
     return { sub: payload.sub, username: payload.username };
@@ -50,11 +53,10 @@ export class AuthService {
 
   private createSession(admin: Admin): AuthSession {
     const expiresAt = new Date(Date.now() + env.AUTH_TOKEN_TTL * 1000);
-    const token = jwt.sign(
-      { username: admin.username },
-      env.AUTH_SECRET,
-      { subject: admin.id, expiresIn: env.AUTH_TOKEN_TTL },
-    );
+    const token = jwt.sign({ username: admin.username }, env.AUTH_SECRET, {
+      subject: admin.id,
+      expiresIn: env.AUTH_TOKEN_TTL,
+    });
     return { token, expiresAt: expiresAt.toISOString() };
   }
 }
