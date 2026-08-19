@@ -32,13 +32,14 @@ Modelo em `apps/web/.env.example`.
 A API ainda **não tem deploy configurado**. Opções recomendadas:
 
 - **Render / Railway / Fly.io** — deploy simples de Node.js.
-- Exigirá: build (`tsc -p tsconfig.build.json`), start (`node dist/index.js`), e as variáveis de ambiente (`PORT`, `DATABASE_URL`, `LOG_LEVEL`, `NODE_ENV`, `CORS_ORIGIN`).
+- Exigirá: build (`tsc -p tsconfig.build.json`), start (`node dist/index.js`), e as variáveis de ambiente (`PORT`, `LOG_LEVEL`, `NODE_ENV`, `CORS_ORIGIN`).
+- Banco: em produção a API usa `DATABASE_URL_PROD` (ou o override `DATABASE_URL`, que tem prioridade).
 - `CORS_ORIGIN`: liberar o domínio do site (ex.: `https://quintoset.vercel.app,https://quintoset.com.br`).
 
 ### Banco de dados em produção
 
 - Usar Postgres gerenciado (Neon, Supabase, Render Postgres, Railway).
-- Definir `DATABASE_URL` no ambiente do deploy.
+- Definir `DATABASE_URL` (override) ou `DATABASE_URL_PROD` no ambiente do deploy.
 - Rodar migrations do Drizzle (quando existirem) no pipeline de deploy.
 
 ## Checklist de release

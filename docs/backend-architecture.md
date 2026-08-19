@@ -124,7 +124,9 @@ container.register("LeadService", { useClass: LeadService });
 | --- | --- | --- |
 | `NODE_ENV` | `development` | `development` \| `test` \| `production` |
 | `PORT` | `3001` | Porta HTTP da API |
-| `DATABASE_URL` | `postgres://quinto_set:quinto_set@localhost:5432/quinto_set` | URL do Postgres |
+| `DATABASE_URL_LOCAL` | `postgres://quinto_set:quinto_set@localhost:5433/quinto_set` | URL do Postgres (usada quando `NODE_ENV != "production"`) |
+| `DATABASE_URL_PROD` | `postgres://quinto_set:quinto_set@localhost:5433/quinto_set` | URL do Postgres (usada quando `NODE_ENV = "production"`) |
+| `DATABASE_URL` | — | Override com prioridade sobre `DATABASE_URL_LOCAL`/`DATABASE_URL_PROD` (ex.: conexão injetada pela plataforma) |
 | `LOG_LEVEL` | `info` | Nível do pino |
 | `CORS_ORIGIN` | `*` | Origens liberadas no CORS; `*` libera qualquer origem; separar múltiplas com vírgula |
 

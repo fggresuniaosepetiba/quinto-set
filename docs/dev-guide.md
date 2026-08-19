@@ -81,7 +81,9 @@ A `config/env.ts` valida com Zod. Se adicionar variável nova, atualize o schema
 | Variável | Default | Descrição |
 | --- | --- | --- |
 | `PORT` | `3001` | Porta HTTP da API |
-| `DATABASE_URL` | `postgres://quinto_set:...` | URL do Postgres |
+| `DATABASE_URL_LOCAL` | `postgres://quinto_set:...` | URL do Postgres (usada quando `NODE_ENV != "production"`) |
+| `DATABASE_URL_PROD` | `postgres://quinto_set:...` | URL do Postgres (usada quando `NODE_ENV = "production"`) |
+| `DATABASE_URL` | — | Override: se definida, tem prioridade sobre as duas acima |
 | `LOG_LEVEL` | `info` | Nível do pino |
 | `CORS_ORIGIN` | `*` | Origens liberadas no CORS (`*` = qualquer; vírgula = lista) |
 | `AUTH_SECRET` | `dev-secret-change-me` | Segredo usado para assinar o JWT do login admin |
