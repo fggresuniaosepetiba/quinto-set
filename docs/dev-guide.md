@@ -98,7 +98,6 @@ A `config/env.ts` valida com Zod. Se adicionar variável nova, atualize o schema
   ```
 
   (a senha é salva como hash scrypt; o seed é idempotente e atualiza a senha se as env mudarem)
-- Com `STORAGE=memory` (sem banco/Docker), o admin é criado automaticamente no boot a partir de `ADMIN_USERNAME`/`ADMIN_PASSWORD` — basta rodar `npm run dev` sem precisar do seed nem do Docker.
 - Login: `POST /auth/login` com `{ username, password }` → `200 { token, expiresAt }` ou `401 { error: "invalid_credentials" }`.
 - As rotas protegidas exigem `Authorization: Bearer <token>`. Hoje, `GET /leads` é protegida.
 
