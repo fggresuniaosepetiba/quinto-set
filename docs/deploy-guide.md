@@ -1,6 +1,6 @@
 # Guia de Deploy
 
-> Como publicar web e API. Última atualização: 2026-08-13.
+> Como publicar web e API. Última atualização: 2026-08-19.
 
 ## Web — Vercel
 
@@ -27,20 +27,53 @@ Os formulários enviam os dados para a API via `NEXT_PUBLIC_API_URL` (default lo
 
 Modelo em `apps/web/.env.example`.
 
-## API — ainda não publicada
+## API — Render + Neon
 
-A API ainda **não tem deploy configurado**. Opções recomendadas:
+A API publicada no Render como Web Service, usando Postgres gerenciado no Neon.
 
-- **Render / Railway / Fly.io** — deploy simples de Node.js.
-- Exigirá: build (`tsc -p tsconfig.build.json`), start (`node dist/index.js`), e as variáveis de ambiente (`PORT`, `LOG_LEVEL`, `NODE_ENV`, `CORS_ORIGIN`).
-- Banco: em produção a API usa `DATABASE_URL_PROD` (ou o override `DATABASE_URL`, que tem prioridade).
-- `CORS_ORIGIN`: liberar o domínio do site (ex.: `https://quintoset.vercel.app,https://quintoset.com.br`).
+### Web Service (Render)
 
-### Banco de dados em produção
+- **Repo:** `quinto-set`
+- **Name:** `quinto-set-api`
+- **Root Directory:** `.` (raiz do monorepo — necessário para resolver o workspace `@quinto-set/contracts`)
+- **Runtime:** Node
+- **Build Command:** `npm ci --include=dev && npm run build --workspace @quinto-set/backend`
+- **Start Command:** `npm run start --workspace @quinto-set/backend`
+- **Instance Type:** Free
+- `npm ci --include=dev` garante que `typescript` e `@types/node` (devDeps) estejam presentes mesmo com `NODE_ENV=production` no install.
 
-- Usar Postgres gerenciado (Neon, Supabase, Render Postgres, Railway).
-- Definir `DATABASE_URL` (override) ou `DATABASE_URL_PROD` no ambiente do deploy.
-- Rodar migrations do Drizzle (quando existirem) no pipeline de deploy.
+### Variáveis de ambiente (API)
+
+| Variável | Valor |
+| --- | --- |
+| `NODE_ENV` | `production` |
+| `DATABASE_URL` | connection string do Neon (override; prioridade sobre `DATABASE_URL_PROD`) |
+| `CORS_ORIGIN` | `https://quintoset.vercel.app` |
+| `AUTH_SECRET` | segredo forte (32+ chars) |
+| `ADMIN_USERNAME` | `quintoset.adm` |
+| `ADMIN_PASSWORD` | senha forte (diferente da de dev) |
+| `LOG_LEVEL` | `info` |
+| `PORT` | não setar (Render injeta) |
+
+> O `PORT` é injetado automaticamente pelo Render. As migrations do Drizzle rodam no boot (não precisa de passo extra no pipeline).
+
+### Seed do admin em produção
+
+Rode **localmente** apontando para o Neon (o free tier do Render não tem Shell):
+
+```powershell
+$env:DATABASE_URL="<connection string do Neon>"
+$env:ADMIN_USERNAME="quintoset.adm"
+$env:ADMIN_PASSWORD="<senha de produção>"
+npm run db:seed --workspace @quinto-set/backend
+```
+
+O `DATABASE_URL` no shell vence o `.env` (dotenv não sobrescreve env já definido).
+
+### Banco de dados em produção (Neon)
+
+- Postgres serverless free (0.5 GB, auto-wake ~570ms, sem expiração).
+- Connection string (Primary, usuário `neondb_owner`) vai em `DATABASE_URL` no Render.
 
 ## Checklist de release
 
@@ -50,3 +83,6 @@ A API ainda **não tem deploy configurado**. Opções recomendadas:
 - [ ] Root Directory = `apps/web` na Vercel
 - [ ] Variáveis de ambiente da API configuradas
 - [ ] Domínio confirmado e `siteConfig.url` atualizado
+- [ ] `GET https://quinto-set-api.onrender.com/health` retorna `{"status":"ok"}`
+- [ ] Login `quintoset.adm` em `quintoset.vercel.app/admin/login` abre o painel
+- [ ] Matrícula no site retorna sucesso e o lead aparece no painel
