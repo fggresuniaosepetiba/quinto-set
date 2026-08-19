@@ -77,12 +77,12 @@ O `DATABASE_URL` no shell vence o `.env` (dotenv não sobrescreve env já defini
 
 ## Checklist de release
 
-- [ ] `npm run lint` sem erros
-- [ ] `npm run test` passando
-- [ ] `npm run build` (web) e `npm run build --workspace @quinto-set/backend` OK
-- [ ] Root Directory = `apps/web` na Vercel
-- [ ] Variáveis de ambiente da API configuradas
-- [ ] Domínio confirmado e `siteConfig.url` atualizado
-- [ ] `GET https://quinto-set-api.onrender.com/health` retorna `{"status":"ok"}`
-- [ ] Login `quintoset.adm` em `quintoset.vercel.app/admin/login` abre o painel
-- [ ] Matrícula no site retorna sucesso e o lead aparece no painel
+- [x] `npm run lint` sem erros
+- [x] `npm run test` passando
+- [x] `npm run build` (web) e `npm run build --workspace @quinto-set/backend` OK
+- [x] Root Directory = `apps/web` na Vercel
+- [x] Variáveis de ambiente da API configuradas
+- [x] Domínio confirmado e `siteConfig.url` atualizado
+- [x] `GET https://quinto-set-api.onrender.com/health` retorna `{"status":"ok"}`
+- [x] Login `quintoset.adm` em `quintoset.vercel.app/admin/login` abre o painel
+- [x] Matrícula no site retorna sucesso e o lead aparece no painel
