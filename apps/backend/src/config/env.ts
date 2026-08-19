@@ -9,7 +9,10 @@ const envSchema = z.object({
     .enum(["development", "test", "production"])
     .default("development"),
   PORT: z.coerce.number().int().positive().default(3001),
-  DATABASE_URL: z
+  DATABASE_URL_LOCAL: z
+    .string()
+    .default("postgres://quinto_set:quinto_set@localhost:5433/quinto_set"),
+  DATABASE_URL_PROD: z
     .string()
     .default("postgres://quinto_set:quinto_set@localhost:5433/quinto_set"),
   STORAGE: z.enum(["postgres", "memory"]).default("postgres"),
@@ -31,4 +34,11 @@ if (!parsed.success) {
   process.exit(1);
 }
 
-export const env = parsed.data;
+export const env = {
+  ...parsed.data,
+  DATABASE_URL:
+    process.env.DATABASE_URL ??
+    (parsed.data.NODE_ENV === "production"
+      ? parsed.data.DATABASE_URL_PROD
+      : parsed.data.DATABASE_URL_LOCAL),
+};
