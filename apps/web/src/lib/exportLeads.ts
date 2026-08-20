@@ -44,11 +44,14 @@ export function buildLeadsWorkbook(leads: Lead[]): ExcelJS.Workbook {
   const formatDate = (iso: string): string =>
     new Date(iso).toLocaleString("pt-BR");
 
+  const formatBirthDate = (iso: string): string =>
+    iso ? iso.split("-").reverse().join("/") : "";
+
   const contacts = leads.filter((lead) => lead.type === "contact");
   addSheet(
     workbook,
     "Contatos",
-    ["Nome", "E-mail", "Telefone", "Assunto", "Mensagem", "Data de envio"],
+    ["Nome", "E-mail", "Telefone", "Assunto", "Mensagem", "Data de cadastro"],
     contacts.map((lead) => {
       const data = lead.data as Extract<Lead["data"], { name: string }>;
       return {
@@ -57,7 +60,7 @@ export function buildLeadsWorkbook(leads: Lead[]): ExcelJS.Workbook {
         Telefone: data.phone ?? "",
         Assunto: data.subject ?? "",
         Mensagem: data.message,
-        "Data de envio": formatDate(lead.createdAt),
+        "Data de cadastro": formatDate(lead.createdAt),
       };
     }),
   );
@@ -80,7 +83,7 @@ export function buildLeadsWorkbook(leads: Lead[]): ExcelJS.Workbook {
       "Parentesco",
       "Telefone do responsável",
       "E-mail do responsável",
-      "Data de envio",
+      "Data de cadastro",
     ],
     enrollments.map((lead) => {
       const data = lead.data as Extract<
@@ -89,7 +92,7 @@ export function buildLeadsWorkbook(leads: Lead[]): ExcelJS.Workbook {
       >;
       return {
         "Nome do aluno": data.student.name,
-        "Data de nascimento": data.student.birthDate,
+        "Data de nascimento": formatBirthDate(data.student.birthDate),
         Sexo: data.student.sex,
         Telefone: data.student.phone,
         "E-mail": data.student.email ?? "",
@@ -101,7 +104,7 @@ export function buildLeadsWorkbook(leads: Lead[]): ExcelJS.Workbook {
         Parentesco: data.guardian.relationship,
         "Telefone do responsável": data.guardian.phone,
         "E-mail do responsável": data.guardian.email,
-        "Data de envio": formatDate(lead.createdAt),
+        "Data de cadastro": formatDate(lead.createdAt),
       };
     }),
   );
@@ -120,7 +123,7 @@ export function buildLeadsWorkbook(leads: Lead[]): ExcelJS.Workbook {
       "UF",
       "Tipo de apoio",
       "Mensagem",
-      "Data de envio",
+      "Data de cadastro",
     ],
     sponsors.map((lead) => {
       const data = lead.data as Extract<Lead["data"], { company: string }>;
@@ -134,7 +137,7 @@ export function buildLeadsWorkbook(leads: Lead[]): ExcelJS.Workbook {
         UF: data.state ?? "",
         "Tipo de apoio": data.support ?? "",
         Mensagem: data.message ?? "",
-        "Data de envio": formatDate(lead.createdAt),
+        "Data de cadastro": formatDate(lead.createdAt),
       };
     }),
   );

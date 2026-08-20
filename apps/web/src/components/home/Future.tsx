@@ -1,3 +1,4 @@
+import Image from "next/image";
 import { Container } from "@/components/ui/Container";
 import { Reveal } from "@/components/ui/Reveal";
 import { ButtonLink } from "@/components/ui/Button";
@@ -79,14 +80,12 @@ export function Future() {
 
               <span className="absolute inset-0 animate-orbit-jupiter">
                 <span className="absolute left-1/2 top-0 -translate-x-1/2 -translate-y-1/2">
-                  <span
-                    className="block rounded-full"
-                    style={{
-                      width: 18,
-                      height: 18,
-                      background:
-                        "radial-gradient(circle at 35% 30%, #f8e3c0 0%, #d9a066 45%, #a06a3a 100%)",
-                    }}
+                  <Image
+                    src="/planets/jupiter.jpg"
+                    alt=""
+                    width={18}
+                    height={18}
+                    className="rounded-full"
                   />
                 </span>
               </span>
@@ -95,18 +94,12 @@ export function Future() {
                 style={{ animationDelay: "-9s" }}
               >
                 <span className="absolute left-1/2 top-0 -translate-x-1/2 -translate-y-1/2">
-                  <span
-                    className="block rounded-full"
-                    style={{
-                      width: 16,
-                      height: 16,
-                      background:
-                        "radial-gradient(circle at 35% 30%, #f7e9c8 0%, #e2c07e 50%, #b0894d 100%)",
-                    }}
-                  />
-                  <span
-                    className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 rounded-full border border-gold-400/70"
-                    style={{ width: 24, height: 9, transform: "translate(-50%, -50%) rotate(-20deg)" }}
+                  <Image
+                    src="/planets/saturn.jpg"
+                    alt=""
+                    width={18}
+                    height={18}
+                    className="object-contain"
                   />
                 </span>
               </span>
@@ -116,14 +109,12 @@ export function Future() {
                 style={{ animationDelay: "-4s" }}
               >
                 <span className="absolute left-1/2 top-0 -translate-x-1/2 -translate-y-1/2">
-                  <span
-                    className="block rounded-full"
-                    style={{
-                      width: 14,
-                      height: 14,
-                      background:
-                        "radial-gradient(circle at 35% 30%, #9ad0f5 0%, #3a86c8 55%, #1a4f8b 100%)",
-                    }}
+                  <Image
+                    src="/planets/earth.jpg"
+                    alt=""
+                    width={14}
+                    height={14}
+                    className="rounded-full"
                   />
                 </span>
               </span>
@@ -132,14 +123,12 @@ export function Future() {
                 style={{ animationDelay: "-14s" }}
               >
                 <span className="absolute left-1/2 top-0 -translate-x-1/2 -translate-y-1/2">
-                  <span
-                    className="block rounded-full"
-                    style={{
-                      width: 12,
-                      height: 12,
-                      background:
-                        "radial-gradient(circle at 35% 30%, #f2a080 0%, #c0480e 55%, #7a2a08 100%)",
-                    }}
+                  <Image
+                    src="/planets/mars.jpg"
+                    alt=""
+                    width={12}
+                    height={12}
+                    className="rounded-full"
                   />
                 </span>
               </span>
@@ -149,14 +138,12 @@ export function Future() {
                 style={{ animationDelay: "-6s" }}
               >
                 <span className="absolute left-1/2 top-0 -translate-x-1/2 -translate-y-1/2">
-                  <span
-                    className="block rounded-full"
-                    style={{
-                      width: 10,
-                      height: 10,
-                      background:
-                        "radial-gradient(circle at 35% 30%, #d3d9e0 0%, #8c959f 55%, #565e68 100%)",
-                    }}
+                  <Image
+                    src="/planets/mercury.jpg"
+                    alt=""
+                    width={10}
+                    height={10}
+                    className="rounded-full"
                   />
                 </span>
               </span>
@@ -165,14 +152,12 @@ export function Future() {
                 style={{ animationDelay: "-20s" }}
               >
                 <span className="absolute left-1/2 top-0 -translate-x-1/2 -translate-y-1/2">
-                  <span
-                    className="block rounded-full"
-                    style={{
-                      width: 13,
-                      height: 13,
-                      background:
-                        "radial-gradient(circle at 35% 30%, #f8edc8 0%, #e2c070 55%, #b08a3a 100%)",
-                    }}
+                  <Image
+                    src="/planets/venus.jpg"
+                    alt=""
+                    width={13}
+                    height={13}
+                    className="rounded-full"
                   />
                 </span>
               </span>

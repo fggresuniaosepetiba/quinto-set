@@ -25,6 +25,8 @@ type FieldProps = {
   hint?: string;
   mask?: "phone";
   maxLength?: number;
+  min?: string;
+  max?: string;
   autoComplete?: string;
   value: string;
   onChange: (name: string, value: string) => void;
@@ -46,6 +48,8 @@ export function Field({
   hint,
   mask,
   maxLength,
+  min,
+  max,
   autoComplete,
   value,
   onChange,
@@ -147,6 +151,8 @@ export function Field({
             onChange={handleInputChange}
             onBlur={handleBlur}
             maxLength={isPhone ? PHONE_MASKED_MAX_LENGTH : maxLength}
+            min={min}
+            max={max}
             className={controlClasses}
             {...errorProps}
           />

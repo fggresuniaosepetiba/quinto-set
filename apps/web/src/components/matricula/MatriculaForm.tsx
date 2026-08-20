@@ -8,9 +8,11 @@ import { useFormState } from "@/lib/useFormState";
 import { postLead } from "@/lib/api";
 import { maskPhone } from "@/lib/validation";
 import {
+  birthDateRule,
   emailRule,
   phoneRule,
   requiredRule,
+  todayDateInputValue,
   type FieldRule,
 } from "@/lib/validation";
 
@@ -37,7 +39,7 @@ export function MatriculaForm() {
 
   const rules: Record<string, FieldRule> = {
     aluno_nome: requiredRule(true),
-    aluno_nascimento: requiredRule(true),
+    aluno_nascimento: birthDateRule(true),
     aluno_sexo: requiredRule(true),
     aluno_telefone: phoneRule(true),
     aluno_email: emailRule(false),
@@ -139,6 +141,7 @@ export function MatriculaForm() {
               name="aluno_nascimento"
               type="date"
               required
+              max={todayDateInputValue()}
               value={values.aluno_nascimento}
               onChange={handleChange}
               onBlur={blur}

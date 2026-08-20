@@ -163,16 +163,16 @@ export default function AdminPage() {
 }
 
 const HEADERS: Record<LeadType, string[]> = {
-  contact: ["Nome", "E-mail", "Telefone", "Assunto", "Mensagem", "Data"],
+  contact: ["Nome", "E-mail", "Telefone", "Assunto", "Mensagem", "Data de cadastro"],
   enrollment: [
     "Aluno",
-    "Nascimento",
+    "Data de nascimento",
     "Categoria",
     "Responsável",
-    "Telefone",
-    "Data",
+    "Telefone do responsável",
+    "Data de cadastro",
   ],
-  sponsor: ["Empresa", "Segmento", "Contato", "E-mail", "Telefone", "Data"],
+  sponsor: ["Empresa", "Segmento", "Contato", "E-mail", "Telefone", "Data de cadastro"],
 };
 
 function LeadTable({ type, leads }: { type: LeadType; leads: Lead[] }) {
@@ -234,7 +234,7 @@ function LeadRow({ lead }: { lead: Lead }) {
       const guardian = data.guardian as Record<string, unknown> | undefined;
       return [
         String(student?.name ?? ""),
-        String(student?.birthDate ?? ""),
+        String(student?.birthDate ?? "").split("-").reverse().join("/"),
         String(student?.category ?? ""),
         String(guardian?.name ?? ""),
         String(guardian?.phone ?? ""),

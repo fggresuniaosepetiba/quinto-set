@@ -1,5 +1,7 @@
 import { z } from "zod";
 
+export const MIN_BIRTH_YEAR = new Date().getFullYear() - 25;
+
 export const healthResponseSchema = z.object({
   status: z.literal("ok"),
   timestamp: z.string().datetime(),
@@ -36,7 +38,21 @@ export const emailSchema = z.email({ message: "Informe um e-mail válido." }).tr
 
 const studentData = z.object({
   name: requiredText("Informe o nome do aluno."),
-  birthDate: z.string().date({ message: "Informe uma data válida." }),
+  birthDate: z
+    .string()
+    .date({ message: "Informe uma data válida." })
+    .refine(
+      (value) => {
+        const [year, month, day] = value.split("-").map(Number);
+        const date = new Date(Date.UTC(year, month - 1, day));
+        const validCalendar =
+          date.getUTCFullYear() === year &&
+          date.getUTCMonth() === month - 1 &&
+          date.getUTCDate() === day;
+        return validCalendar && year >= MIN_BIRTH_YEAR && date <= new Date();
+      },
+      { message: "Data de nascimento inválida." },
+    ),
   sex: z.enum(["Masculino", "Feminino"]),
   phone: phoneSchema,
   email: emailSchema.optional(),
