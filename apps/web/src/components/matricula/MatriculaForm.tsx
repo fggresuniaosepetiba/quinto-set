@@ -3,11 +3,13 @@
 import { useState } from "react";
 import { ShieldCheck, Send } from "lucide-react";
 import { Field } from "@/components/ui/Field";
+import { FormErrors } from "@/components/ui/FormErrors";
 import { FormSuccess } from "@/components/ui/FormSuccess";
 import { useFormState } from "@/lib/useFormState";
 import { postLead } from "@/lib/api";
 import { maskPhone } from "@/lib/validation";
 import {
+  MIN_BIRTH_YEAR,
   birthDateRule,
   emailRule,
   phoneRule,
@@ -20,6 +22,7 @@ export function MatriculaForm() {
   const [sent, setSent] = useState(false);
   const [submitting, setSubmitting] = useState(false);
   const [submitError, setSubmitError] = useState<string | null>(null);
+  const [attempted, setAttempted] = useState(false);
   const { values, errors, handleChange, handleBlur, validateAll } =
     useFormState({
       aluno_nome: "",
@@ -53,10 +56,35 @@ export function MatriculaForm() {
     resp_email: emailRule(true),
   };
 
+  const FIELD_LABELS: Record<string, string> = {
+    aluno_nome: "Nome completo do aluno",
+    aluno_nascimento: "Data de nascimento",
+    aluno_sexo: "Sexo",
+    aluno_telefone: "Telefone / WhatsApp do aluno",
+    aluno_email: "E-mail",
+    aluno_endereco: "Endereço / Bairro",
+    aluno_escola: "Escola onde estuda",
+    aluno_serie: "Série / Ano escolar",
+    aluno_categoria: "Categoria pretendida",
+    resp_nome: "Nome completo do responsável",
+    resp_parentesco: "Parentesco",
+    resp_telefone: "Telefone / WhatsApp do responsável",
+    resp_email: "E-mail do responsável",
+  };
+
+  const invalidItems = attempted
+    ? Object.keys(FIELD_LABELS).flatMap((name) =>
+        errors[name]
+          ? [{ name, label: FIELD_LABELS[name], error: errors[name] }]
+          : [],
+      )
+    : [];
+
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     const nextErrors = validateAll(rules);
     if (Object.keys(nextErrors).length > 0) {
+      setAttempted(true);
       const firstName = Object.keys(nextErrors)[0];
       window.setTimeout(() => {
         document.getElementById(`${firstName}-field`)?.focus();
@@ -117,6 +145,7 @@ export function MatriculaForm() {
             {submitError}
           </p>
         )}
+        <FormErrors items={invalidItems} />
         <fieldset>
           <legend className="mb-5 flex items-center gap-2 font-display text-lg font-bold uppercase tracking-wide text-navy-900">
             <span className="flex h-8 w-8 items-center justify-center rounded-md bg-navy-950 text-sm text-gold-400">
@@ -135,6 +164,7 @@ export function MatriculaForm() {
               onChange={handleChange}
               onBlur={blur}
               error={errors.aluno_nome}
+              hint="Obrigatório"
             />
             <Field
               label="Data de nascimento"
@@ -146,6 +176,7 @@ export function MatriculaForm() {
               onChange={handleChange}
               onBlur={blur}
               error={errors.aluno_nascimento}
+              hint={`Obrigatório • não futura e a partir de ${MIN_BIRTH_YEAR}`}
             />
             <Field
               label="Sexo"
@@ -156,6 +187,7 @@ export function MatriculaForm() {
               onChange={handleChange}
               onBlur={blur}
               error={errors.aluno_sexo}
+              hint="Obrigatório"
             />
             <Field
               label="Telefone / WhatsApp"
@@ -167,6 +199,7 @@ export function MatriculaForm() {
               onChange={handleChange}
               onBlur={blur}
               error={errors.aluno_telefone}
+              hint="Obrigatório • 11 dígitos com DDD"
             />
             <Field
               label="E-mail"
@@ -178,6 +211,7 @@ export function MatriculaForm() {
               onChange={handleChange}
               onBlur={blur}
               error={errors.aluno_email}
+              hint="Opcional • e-mail válido se informado"
             />
             <Field
               label="Endereço / Bairro"
@@ -188,6 +222,7 @@ export function MatriculaForm() {
               onChange={handleChange}
               onBlur={blur}
               error={errors.aluno_endereco}
+              hint="Obrigatório"
             />
             <Field
               label="Escola onde estuda"
@@ -198,6 +233,7 @@ export function MatriculaForm() {
               onChange={handleChange}
               onBlur={blur}
               error={errors.aluno_escola}
+              hint="Obrigatório"
             />
             <Field
               label="Série / Ano escolar"
@@ -208,6 +244,7 @@ export function MatriculaForm() {
               onChange={handleChange}
               onBlur={blur}
               error={errors.aluno_serie}
+              hint="Obrigatório"
             />
             <Field
               label="Categoria pretendida"
@@ -218,6 +255,7 @@ export function MatriculaForm() {
               onChange={handleChange}
               onBlur={blur}
               error={errors.aluno_categoria}
+              hint="Obrigatório"
             />
           </div>
         </fieldset>
@@ -240,6 +278,7 @@ export function MatriculaForm() {
               onChange={handleChange}
               onBlur={blur}
               error={errors.resp_nome}
+              hint="Obrigatório"
             />
             <Field
               label="Parentesco"
@@ -250,6 +289,7 @@ export function MatriculaForm() {
               onChange={handleChange}
               onBlur={blur}
               error={errors.resp_parentesco}
+              hint="Obrigatório"
             />
             <Field
               label="Telefone / WhatsApp"
@@ -261,6 +301,7 @@ export function MatriculaForm() {
               onChange={handleChange}
               onBlur={blur}
               error={errors.resp_telefone}
+              hint="Obrigatório • 11 dígitos com DDD"
             />
             <Field
               label="E-mail"
@@ -273,6 +314,7 @@ export function MatriculaForm() {
               onChange={handleChange}
               onBlur={blur}
               error={errors.resp_email}
+              hint="Obrigatório • e-mail válido"
             />
           </div>
         </fieldset>

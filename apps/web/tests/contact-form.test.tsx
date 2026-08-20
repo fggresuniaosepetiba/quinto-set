@@ -1,4 +1,11 @@
-import { act, fireEvent, render, screen, waitFor } from "@testing-library/react";
+import {
+  act,
+  fireEvent,
+  render,
+  screen,
+  waitFor,
+  within,
+} from "@testing-library/react";
 import { ContactForm } from "@/components/ui/ContactForm";
 import { postLead } from "@/lib/api";
 
@@ -65,11 +72,23 @@ describe("ContactForm", () => {
     );
   });
 
-  it("não envia quando há campos obrigatórios vazios", () => {
+  it("não envia e lista os campos inválidos com o motivo", () => {
     render(<ContactForm />);
     fireEvent.click(screen.getByRole("button", { name: /enviar mensagem/i }));
     expect(mockedPostLead).not.toHaveBeenCalled();
     expect(screen.getAllByRole("alert").length).toBeGreaterThan(0);
+    const summary = screen
+      .getByText("Corrija os campos abaixo:")
+      .closest("[role='alert']") as HTMLElement;
+    expect(
+      within(summary).getByText("Nome"),
+    ).toBeInTheDocument();
+    expect(
+      within(summary).getByText("E-mail"),
+    ).toBeInTheDocument();
+    expect(
+      within(summary).getAllByText("Preencha este campo.").length,
+    ).toBeGreaterThanOrEqual(3);
   });
 
   it("mostra a mensagem de erro quando a API falha", async () => {

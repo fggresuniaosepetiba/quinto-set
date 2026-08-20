@@ -45,13 +45,21 @@ const studentData = z.object({
       (value) => {
         const [year, month, day] = value.split("-").map(Number);
         const date = new Date(Date.UTC(year, month - 1, day));
-        const validCalendar =
+        return (
           date.getUTCFullYear() === year &&
           date.getUTCMonth() === month - 1 &&
-          date.getUTCDate() === day;
-        return validCalendar && year >= MIN_BIRTH_YEAR && date <= new Date();
+          date.getUTCDate() === day
+        );
       },
-      { message: "Data de nascimento inválida." },
+      { message: "Informe uma data válida." },
+    )
+    .refine(
+      (value) => new Date(value + "T00:00:00Z") <= new Date(),
+      { message: "A data de nascimento não pode ser no futuro." },
+    )
+    .refine(
+      (value) => Number(value.split("-")[0]) >= MIN_BIRTH_YEAR,
+      { message: `A data de nascimento precisa ser a partir de ${MIN_BIRTH_YEAR}.` },
     ),
   sex: z.enum(["Masculino", "Feminino"]),
   phone: phoneSchema,

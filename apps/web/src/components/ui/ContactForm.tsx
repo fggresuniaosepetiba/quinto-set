@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { Send } from "lucide-react";
 import { Field } from "@/components/ui/Field";
+import { FormErrors } from "@/components/ui/FormErrors";
 import { FormSuccess } from "@/components/ui/FormSuccess";
 import { useFormState } from "@/lib/useFormState";
 import { postLead } from "@/lib/api";
@@ -26,6 +27,7 @@ export function ContactForm({
   const [sent, setSent] = useState(false);
   const [submitting, setSubmitting] = useState(false);
   const [submitError, setSubmitError] = useState<string | null>(null);
+  const [attempted, setAttempted] = useState(false);
   const { values, errors, handleChange, handleBlur, validateAll } =
     useFormState({
       nome: "",
@@ -42,10 +44,27 @@ export function ContactForm({
     mensagem: requiredRule(true),
   };
 
+  const FIELD_LABELS: Record<string, string> = {
+    nome: "Nome",
+    email: "E-mail",
+    telefone: "Telefone / WhatsApp",
+    assunto: "Assunto",
+    mensagem: "Mensagem",
+  };
+
+  const invalidItems = attempted
+    ? Object.keys(FIELD_LABELS).flatMap((name) =>
+        errors[name]
+          ? [{ name, label: FIELD_LABELS[name], error: errors[name] }]
+          : [],
+      )
+    : [];
+
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     const nextErrors = validateAll(rules);
     if (Object.keys(nextErrors).length > 0) {
+      setAttempted(true);
       const firstName = Object.keys(nextErrors)[0];
       window.setTimeout(() => {
         document.getElementById(`${firstName}-field`)?.focus();
@@ -93,6 +112,7 @@ export function ContactForm({
           {submitError}
         </p>
       )}
+      <FormErrors items={invalidItems} />
       <div className="grid gap-4 sm:grid-cols-2">
         <Field
           label="Nome"
@@ -104,6 +124,7 @@ export function ContactForm({
           onChange={handleChange}
           onBlur={blur}
           error={errors.nome}
+          hint="Obrigatório"
         />
         <Field
           label="E-mail"
@@ -116,6 +137,7 @@ export function ContactForm({
           onChange={handleChange}
           onBlur={blur}
           error={errors.email}
+          hint="Obrigatório • e-mail válido"
         />
       </div>
       <div className="grid gap-4 sm:grid-cols-2">
@@ -128,6 +150,7 @@ export function ContactForm({
           onChange={handleChange}
           onBlur={blur}
           error={errors.telefone}
+          hint="Opcional • 11 dígitos com DDD"
         />
         <Field
           label="Assunto"
@@ -137,6 +160,7 @@ export function ContactForm({
           onChange={handleChange}
           onBlur={blur}
           error={errors.assunto}
+          hint="Opcional"
         />
       </div>
       <Field
@@ -149,6 +173,7 @@ export function ContactForm({
         onChange={handleChange}
         onBlur={blur}
         error={errors.mensagem}
+        hint="Obrigatório"
       />
       <button
         type="submit"

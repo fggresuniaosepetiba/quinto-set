@@ -51,7 +51,9 @@ export const MESSAGES = {
   required: "Preencha este campo.",
   email: "Informe um e-mail válido.",
   phone: "Informe um telefone válido.",
-  birthDate: "Data de nascimento inválida.",
+  birthDateInvalid: "Informe uma data válida.",
+  birthDateFuture: "A data de nascimento não pode ser no futuro.",
+  birthDateTooOld: `A data de nascimento precisa ser a partir de ${MIN_BIRTH_YEAR}.`,
 } as const;
 
 export type FieldRule = (value: string) => string | null;
@@ -106,6 +108,19 @@ export function birthDateRule(required: boolean): FieldRule {
   return (value) => {
     const v = value.trim();
     if (!v) return required ? MESSAGES.required : null;
-    return isValidBirthDate(v) ? null : MESSAGES.birthDate;
+    const match = /^(\d{4})-(\d{2})-(\d{2})$/.exec(v);
+    if (!match) return MESSAGES.birthDateInvalid;
+    const year = Number(match[1]);
+    const month = Number(match[2]);
+    const day = Number(match[3]);
+    const date = new Date(Date.UTC(year, month - 1, day));
+    const validCalendar =
+      date.getUTCFullYear() === year &&
+      date.getUTCMonth() === month - 1 &&
+      date.getUTCDate() === day;
+    if (!validCalendar) return MESSAGES.birthDateInvalid;
+    if (date > new Date()) return MESSAGES.birthDateFuture;
+    if (year < MIN_BIRTH_YEAR) return MESSAGES.birthDateTooOld;
+    return null;
   };
 }

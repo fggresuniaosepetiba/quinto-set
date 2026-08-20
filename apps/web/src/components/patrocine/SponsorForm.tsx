@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { Send } from "lucide-react";
 import { Field } from "@/components/ui/Field";
+import { FormErrors } from "@/components/ui/FormErrors";
 import { FormSuccess } from "@/components/ui/FormSuccess";
 import { useFormState } from "@/lib/useFormState";
 import { postLead } from "@/lib/api";
@@ -18,6 +19,7 @@ export function SponsorForm() {
   const [sent, setSent] = useState(false);
   const [submitting, setSubmitting] = useState(false);
   const [submitError, setSubmitError] = useState<string | null>(null);
+  const [attempted, setAttempted] = useState(false);
   const { values, errors, handleChange, handleBlur, validateAll } =
     useFormState({
       empresa_nome: "",
@@ -44,6 +46,26 @@ export function SponsorForm() {
     empresa_apoio_outro: isApoioOutro ? requiredRule(true) : undefined,
   };
 
+  const FIELD_LABELS: Record<string, string> = {
+    empresa_nome: "Nome da empresa",
+    empresa_responsavel: "Nome do responsável",
+    empresa_email: "E-mail",
+    empresa_telefone: "Telefone / WhatsApp",
+    empresa_segmento: "Segmento",
+    empresa_segmento_outro: "Outro segmento",
+    empresa_apoio: "Tipo de apoio / interesse",
+    empresa_apoio_outro: "Outro tipo de apoio",
+    empresa_mensagem: "Mensagem",
+  };
+
+  const invalidItems = attempted
+    ? Object.keys(FIELD_LABELS).flatMap((name) =>
+        errors[name]
+          ? [{ name, label: FIELD_LABELS[name], error: errors[name] }]
+          : [],
+      )
+    : [];
+
   const handleChangeCleaned = (name: string, value: string) => {
     handleChange(name, value);
     if (name === "empresa_segmento" && value !== "Outro") {
@@ -58,6 +80,7 @@ export function SponsorForm() {
     event.preventDefault();
     const nextErrors = validateAll(rules);
     if (Object.keys(nextErrors).length > 0) {
+      setAttempted(true);
       const firstName = Object.keys(nextErrors)[0];
       window.setTimeout(() => {
         document.getElementById(`${firstName}-field`)?.focus();
@@ -112,6 +135,7 @@ export function SponsorForm() {
             {submitError}
           </p>
         )}
+        <FormErrors items={invalidItems} />
         <div className="grid gap-4 sm:grid-cols-2">
           <Field
             label="Nome da empresa"
@@ -122,6 +146,7 @@ export function SponsorForm() {
             onChange={handleChange}
             onBlur={blur}
             error={errors.empresa_nome}
+            hint="Obrigatório"
           />
           <Field
             label="Nome do responsável"
@@ -132,6 +157,7 @@ export function SponsorForm() {
             onChange={handleChange}
             onBlur={blur}
             error={errors.empresa_responsavel}
+            hint="Obrigatório"
           />
           <Field
             label="E-mail"
@@ -144,6 +170,7 @@ export function SponsorForm() {
             onChange={handleChange}
             onBlur={blur}
             error={errors.empresa_email}
+            hint="Obrigatório • e-mail válido"
           />
           <Field
             label="Telefone / WhatsApp"
@@ -155,6 +182,7 @@ export function SponsorForm() {
             onChange={handleChange}
             onBlur={blur}
             error={errors.empresa_telefone}
+            hint="Obrigatório • 11 dígitos com DDD"
           />
           <div className="grid gap-4">
             <Field
@@ -166,6 +194,7 @@ export function SponsorForm() {
               onBlur={blur}
               error={errors.empresa_segmento}
               labelClassName="min-h-[2rem]"
+              hint="Obrigatório"
             />
             <Field
               label="Outro segmento"
@@ -178,6 +207,7 @@ export function SponsorForm() {
               onBlur={blur}
               error={errors.empresa_segmento_outro}
               labelClassName="min-h-[2rem]"
+              hint="Obrigatório se 'Outro'"
             />
           </div>
           <div className="grid gap-4">
@@ -191,6 +221,7 @@ export function SponsorForm() {
               onBlur={blur}
               error={errors.empresa_apoio}
               labelClassName="min-h-[2rem]"
+              hint="Obrigatório"
             />
             <Field
               label="Outro tipo de apoio / interesse"
@@ -203,6 +234,7 @@ export function SponsorForm() {
               onBlur={blur}
               error={errors.empresa_apoio_outro}
               labelClassName="min-h-[2rem]"
+              hint="Obrigatório se 'Outro'"
             />
           </div>
         </div>
@@ -216,6 +248,7 @@ export function SponsorForm() {
           onChange={handleChange}
           onBlur={blur}
           error={errors.empresa_mensagem}
+          hint="Obrigatório"
         />
         <p className="text-xs leading-relaxed text-navy-900/60">
           Suas informações serão utilizadas apenas para o contato sobre apoio ao

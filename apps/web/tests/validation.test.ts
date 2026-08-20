@@ -1,5 +1,6 @@
 import {
   MESSAGES,
+  birthDateRule,
   cursorAfterDigits,
   emailRule,
   isValidEmail,
@@ -129,5 +130,28 @@ describe("rules", () => {
     expect(phoneRule(true)("(21) 9.7493-468")).toBe(MESSAGES.phone);
     expect(phoneRule(true)("(21) 9.7493-4685")).toBeNull();
     expect(phoneRule(false)("")).toBeNull();
+  });
+
+  it("birthDateRule exige data quando obrigatório", () => {
+    expect(birthDateRule(true)("")).toBe(MESSAGES.required);
+    expect(birthDateRule(false)("")).toBeNull();
+  });
+
+  it("birthDateRule rejeita data de calendário inválida", () => {
+    expect(birthDateRule(true)("2010-02-30")).toBe(MESSAGES.birthDateInvalid);
+  });
+
+  it("birthDateRule rejeita data futura", () => {
+    expect(birthDateRule(true)("2026-12-31")).toBe(MESSAGES.birthDateFuture);
+  });
+
+  it("birthDateRule rejeita data muito antiga", () => {
+    expect(birthDateRule(true)("1775-02-05")).toBe(MESSAGES.birthDateTooOld);
+    expect(birthDateRule(true)("1500-02-05")).toBe(MESSAGES.birthDateTooOld);
+  });
+
+  it("birthDateRule aceita data real e não futura", () => {
+    expect(birthDateRule(true)("2010-05-14")).toBeNull();
+    expect(birthDateRule(true)("1990-06-01")).toBeNull();
   });
 });
