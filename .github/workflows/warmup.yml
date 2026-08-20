@@ -12,4 +12,17 @@ jobs:
 
     steps:
       - name: Ping API health
-        run: 'curl -sf -o /dev/null -w "API health: %{http_code} (%{time_total}s)\n" https://quinto-set-api.onrender.com/health'
+        run: |
+          for i in 1 2 3 4 5; do
+            echo "Attempt $i"
+            code=$(curl -s -o /dev/null -w "%{http_code}" https://quinto-set-api.onrender.com/health)
+            echo "HTTP $code"
+            if [ "$code" -ge 200 ] && [ "$code" -lt 500 ]; then
+              echo "API healthy ($code)"
+              exit 0
+            fi
+            echo "API not ready, retrying..."
+            sleep 20
+          done
+          echo "API unreachable after 5 attempts" >&2
+          exit 1
