@@ -1,6 +1,6 @@
 export const PHONE_MAX_DIGITS = 11;
 export const PHONE_MASKED_MAX_LENGTH = 16;
-export const MIN_BIRTH_YEAR = new Date().getFullYear() - 25;
+export const MIN_BIRTH_YEAR = new Date().getFullYear() - 100;
 
 const EMAIL_PATTERN = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 

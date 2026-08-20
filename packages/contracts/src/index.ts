@@ -1,6 +1,6 @@
 import { z } from "zod";
 
-export const MIN_BIRTH_YEAR = new Date().getFullYear() - 25;
+export const MIN_BIRTH_YEAR = new Date().getFullYear() - 100;
 
 export const healthResponseSchema = z.object({
   status: z.literal("ok"),
