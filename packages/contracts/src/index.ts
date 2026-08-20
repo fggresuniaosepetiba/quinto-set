@@ -34,7 +34,9 @@ export const phoneSchema = z
     message: "Telefone inválido.",
   });
 
-export const emailSchema = z.email({ message: "Informe um e-mail válido." }).trim();
+export const emailSchema = z
+  .email({ message: "Informe um e-mail válido." })
+  .trim();
 
 const studentData = z.object({
   name: requiredText("Informe o nome do aluno."),
@@ -53,21 +55,22 @@ const studentData = z.object({
       },
       { message: "Informe uma data válida." },
     )
-    .refine(
-      (value) => new Date(value + "T00:00:00Z") <= new Date(),
-      { message: "A data de nascimento não pode ser no futuro." },
-    )
-    .refine(
-      (value) => Number(value.split("-")[0]) >= MIN_BIRTH_YEAR,
-      { message: `A data de nascimento precisa ser a partir de ${MIN_BIRTH_YEAR}.` },
-    ),
-  sex: z.enum(["Masculino", "Feminino"]),
+    .refine((value) => new Date(value + "T00:00:00Z") <= new Date(), {
+      message: "A data de nascimento não pode ser no futuro.",
+    })
+    .refine((value) => Number(value.split("-")[0]) >= MIN_BIRTH_YEAR, {
+      message: `A data de nascimento precisa ser a partir de ${MIN_BIRTH_YEAR}.`,
+    }),
+  sex: z.enum(["Masculino", "Feminino"], "Informe um sexo válido."),
   phone: phoneSchema,
   email: emailSchema.optional(),
   address: requiredText("Informe o endereço."),
   school: requiredText("Informe a escola."),
   grade: requiredText("Informe a série."),
-  category: z.enum(["SUB-14", "SUB-16", "SUB-18", "SUB-19"]),
+  category: z.enum(
+    ["SUB-14", "SUB-16", "SUB-18", "SUB-19"],
+    "Informe uma categoria válida.",
+  ),
 });
 
 const guardianData = z.object({
