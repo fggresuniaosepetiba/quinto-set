@@ -1,6 +1,6 @@
 # Frontend — Todo
 
-> Pendências específicas do frontend (`apps/web`). Última atualização: 2026-08-14.
+> Pendências específicas do frontend (`apps/web`). Última atualização: 2026-08-20.
 
 ## Lint
 
@@ -8,11 +8,11 @@
 - [x] **Warnings resolvidos:** 12 `<img>` → `next/image` em `Footer`, `SponsorsMarquee`, `Formation`, `Categories`, `Purpose`, `Gallery`, `sobre`, `competicoes`, `treinamentos`.
 - [x] Lint do web limpo: `eslint` sem erros nem warnings.
 
-## Testes (a configurar)
+## Testes
 
-- [ ] Jest + `next/jest` no `@quinto-set/web`.
-- [ ] `@testing-library/react` + `@testing-library/jest-dom` + `jest-environment-jsdom`.
-- [ ] Cobertura inicial: componentes de UI e formulários.
+- [x] Jest + `next/jest` no `@quinto-set/web`.
+- [x] `@testing-library/react` + `@testing-library/jest-dom` + `jest-environment-jsdom`.
+- [x] Cobertura inicial: componentes de UI e formulários (49/49 passando; PR #4).
 
 ## Integração com a API
 
@@ -22,4 +22,4 @@
 ## Dados
 
 - [ ] Preencher redes sociais (`instagram`, `tiktok`, `youtube`) em `apps/web/src/data/site.ts`.
-- [ ] Confirmar domínio real e atualizar `siteConfig.url` (ADR-007).
+- [x] Confirmar domínio real e atualizar `siteConfig.url` (ADR-007) — `https://quintoset.vercel.app`.

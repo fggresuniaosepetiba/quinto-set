@@ -1,6 +1,6 @@
 # Backend — Todo
 
-> Pendências específicas da API (`apps/backend`). Última atualização: 2026-08-14.
+> Pendências específicas da API (`apps/backend`). Última atualização: 2026-08-20.
 
 ## Feito
 
@@ -19,14 +19,14 @@
 ## Pendências
 
 ### Banco de dados
-- [ ] Implementar `PostgresLeadRepository` com Drizzle e trocar o registro no container.
-- [ ] Definir modelos Drizzle (inscrições, contatos, patrocinadores).
-- [ ] Gerar migrations (`drizzle-kit generate`) e aplicá-las (`drizzle-kit migrate`).
+- [x] Implementar `PostgresLeadRepository` com Drizzle e trocar o registro no container.
+- [x] Definir modelos Drizzle (`leads` com `type`/`data` jsonb e `admins`).
+- [x] Gerar migrations (`drizzle-kit generate` — `drizzle/0000_*` e `0001_*`) e aplicá-las.
 
 ### Qualidade
 - [x] ESLint + Prettier no workspace da API (format:check no CI).
 - [ ] Mais testes (unitários de serviços + integração com Supertest).
 
 ### Operacional
-- [ ] Deploy da API (Render/Railway/Fly) e Postgres gerenciado em produção (`DATABASE_URL`).
-- [ ] CI no GitHub Actions (`lint` + `typecheck` + `test` + `build`).
+- [x] Deploy da API (Render) e Postgres gerenciado em produção (Neon) com `DATABASE_URL`/`DATABASE_URL_LOCAL`/`DATABASE_URL_PROD` (PRs #10/#11).
+- [x] CI no GitHub Actions (`lint` + `typecheck` + `test` + `build`).

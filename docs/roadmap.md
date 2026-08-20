@@ -16,23 +16,21 @@
 - [x] **Endpoints de formulários** — `POST /contacts`, `POST /enrollments`, `POST /sponsors` com validação Zod (400 `invalid_input`) e persistência em memória (repositório com interface para trocar por Drizzle).
 - [x] **Web → API** — formulários de matrícula/contato/patrocínio enviam para a API (`src/lib/api.ts` + `NEXT_PUBLIC_API_URL`).
 - [x] **Lint do web limpo** — erro `Navbar.tsx:16` corrigido + 12 warnings `<img>` → `next/image`.
+- [x] **Deploy da API + banco em produção** — API no Render (`https://quinto-set-api.onrender.com`) e Postgres no Neon; `DATABASE_URL` com override e `DATABASE_URL_LOCAL`/`DATABASE_URL_PROD` (PRs #10/#11); `GET /health` → `{"status":"ok"}`.
+- [x] **Registrar/confirmar domínio** — confirmado `quintoset.vercel.app` e `siteConfig.url` atualizado (ADR-007 resolvida).
+- [x] **Root Directory** = `apps/web` no painel Vercel (feito pelo usuário).
+- [x] **Persistência no Postgres** via Drizzle ORM (`PostgresLeadRepository` + migrations; tabelas `leads`/`admins`; PR #5).
+- [x] **ESLint + Prettier** no workspace da API (format:check no CI).
+- [x] **Testes do frontend** — Jest + `next/jest` + Testing Library (49/49 passando; PR #4).
+- [x] **Configurar GitHub Actions** — CI com `lint`, `typecheck`, `test`, `build` (`.github/workflows/ci.yml`).
+- [x] **Admin login + painel de leads** — cookie httpOnly, proteção das rotas e export Excel (PR #6).
 
 ## Próximo (curto prazo)
 
-- [ ] **Configurar deploy da API** (Render/Railway/Fly ou similar) e o banco Postgres em produção.
-- [x] **Registrar/confirmar domínio** — confirmado `quintoset.vercel.app` e `siteConfig.url` atualizado (ADR-007 resolvida).
-- [x] **Root Directory** = `apps/web` no painel Vercel (feito pelo usuário).
-
-## Médio prazo
-
-- [ ] **Persistência no Postgres** via Drizzle ORM (`PostgresLeadRepository` + migrations; hoje em memória).
-- [x] **ESLint + Prettier** no workspace da API (format:check no CI).
-- [ ] **Testes do frontend**: Jest + `next/jest` + Testing Library (componentes, formulários).
-- [ ] **Configurar GitHub Actions**: CI com `lint`, `typecheck`, `test`, `build`.
 - [ ] **Preencher redes sociais** no `siteConfig` (Instagram, TikTok, YouTube).
 
 ## Longo prazo (ideias)
 
-- [ ] Área administrativa (painel para gerência de inscrições/patrocinadores).
+- [ ] Evoluir a área administrativa (gerência de contatos/patrocinadores, não só leads).
 - [ ] Notificações por e-mail ao receber novas inscrições.
 - [ ] Galeria integrada com upload.
