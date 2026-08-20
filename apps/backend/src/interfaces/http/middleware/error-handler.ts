@@ -3,6 +3,17 @@ import { ZodError } from "zod";
 import { logger } from "../../../config/logger.js";
 import { UnauthorizedError } from "./require-auth.js";
 
+interface ClientError {
+  expose?: boolean;
+  status?: number;
+}
+
+function clientErrorStatus(err: unknown): number | undefined {
+  if (typeof err !== "object" || err === null) return undefined;
+  const { expose, status } = err as ClientError;
+  return expose === true && typeof status === "number" ? status : undefined;
+}
+
 export const errorHandler: ErrorRequestHandler = (err, _req, res, _next) => {
   if (err instanceof ZodError) {
     res.status(400).json({
@@ -22,6 +33,12 @@ export const errorHandler: ErrorRequestHandler = (err, _req, res, _next) => {
 
   if (err instanceof Error && err.message === "invalid_credentials") {
     res.status(401).json({ error: "invalid_credentials" });
+    return;
+  }
+
+  const status = clientErrorStatus(err);
+  if (status !== undefined) {
+    res.status(status).json({ error: "bad_request" });
     return;
   }
 
