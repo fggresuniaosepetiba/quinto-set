@@ -47,5 +47,13 @@ export function useFormState(initial: FormValues) {
     [values],
   );
 
-  return { values, errors, setValues, handleChange, handleBlur, validateAll };
+  return {
+    values,
+    errors,
+    setValues,
+    setErrors,
+    handleChange,
+    handleBlur,
+    validateAll,
+  };
 }

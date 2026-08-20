@@ -7,9 +7,12 @@ import { FormErrors } from "@/components/ui/FormErrors";
 import { FormSuccess } from "@/components/ui/FormSuccess";
 import { useFormState } from "@/lib/useFormState";
 import { postLead } from "@/lib/api";
+import { LeadValidationError, mapServerIssues } from "@/lib/leadError";
 import { maskPhone } from "@/lib/validation";
 import {
+  andRules,
   emailRule,
+  maxLengthRule,
   phoneRule,
   requiredRule,
   type FieldRule,
@@ -28,7 +31,7 @@ export function ContactForm({
   const [submitting, setSubmitting] = useState(false);
   const [submitError, setSubmitError] = useState<string | null>(null);
   const [attempted, setAttempted] = useState(false);
-  const { values, errors, handleChange, handleBlur, validateAll } =
+  const { values, errors, setErrors, handleChange, handleBlur, validateAll } =
     useFormState({
       nome: "",
       email: "",
@@ -38,10 +41,19 @@ export function ContactForm({
     });
 
   const rules: Record<string, FieldRule | undefined> = {
-    nome: requiredRule(true),
+    nome: andRules(requiredRule(true), maxLengthRule(255)),
     email: emailRule(true),
     telefone: phoneRule(false),
-    mensagem: requiredRule(true),
+    assunto: maxLengthRule(120),
+    mensagem: andRules(requiredRule(true), maxLengthRule(2000)),
+  };
+
+  const SERVER_PATH_TO_FIELD: Record<string, string> = {
+    name: "nome",
+    email: "email",
+    phone: "telefone",
+    subject: "assunto",
+    message: "mensagem",
   };
 
   const FIELD_LABELS: Record<string, string> = {
@@ -83,9 +95,27 @@ export function ContactForm({
       });
       setSent(true);
     } catch (error) {
-      setSubmitError(
-        error instanceof Error ? error.message : "Não foi possível enviar.",
-      );
+      if (error instanceof LeadValidationError) {
+        const { fields, unmapped } = mapServerIssues(
+          error.issues,
+          SERVER_PATH_TO_FIELD,
+        );
+        setErrors((prev) => ({ ...prev, ...fields }));
+        setAttempted(true);
+        if (unmapped.length > 0) {
+          setSubmitError(unmapped.map((issue) => issue.message).join(" "));
+        }
+        const firstName = Object.keys(fields)[0];
+        if (firstName) {
+          window.setTimeout(() => {
+            document.getElementById(`${firstName}-field`)?.focus();
+          }, 0);
+        }
+      } else {
+        setSubmitError(
+          error instanceof Error ? error.message : "Não foi possível enviar.",
+        );
+      }
     } finally {
       setSubmitting(false);
     }

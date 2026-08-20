@@ -7,9 +7,12 @@ import { FormErrors } from "@/components/ui/FormErrors";
 import { FormSuccess } from "@/components/ui/FormSuccess";
 import { useFormState } from "@/lib/useFormState";
 import { postLead } from "@/lib/api";
+import { LeadValidationError, mapServerIssues } from "@/lib/leadError";
 import { maskPhone } from "@/lib/validation";
 import {
+  andRules,
   emailRule,
+  maxLengthRule,
   phoneRule,
   requiredRule,
   type FieldRule,
@@ -20,7 +23,7 @@ export function SponsorForm() {
   const [submitting, setSubmitting] = useState(false);
   const [submitError, setSubmitError] = useState<string | null>(null);
   const [attempted, setAttempted] = useState(false);
-  const { values, errors, handleChange, handleBlur, validateAll } =
+  const { values, errors, setErrors, handleChange, handleBlur, validateAll } =
     useFormState({
       empresa_nome: "",
       empresa_responsavel: "",
@@ -37,13 +40,27 @@ export function SponsorForm() {
   const isApoioOutro = values.empresa_apoio === "Outro";
 
   const rules: Record<string, FieldRule | undefined> = {
-    empresa_nome: requiredRule(true),
-    empresa_responsavel: requiredRule(true),
+    empresa_nome: andRules(requiredRule(true), maxLengthRule(255)),
+    empresa_responsavel: andRules(requiredRule(true), maxLengthRule(255)),
     empresa_email: emailRule(true),
     empresa_telefone: phoneRule(true),
-    empresa_mensagem: requiredRule(true),
-    empresa_segmento_outro: isSegmentoOutro ? requiredRule(true) : undefined,
-    empresa_apoio_outro: isApoioOutro ? requiredRule(true) : undefined,
+    empresa_mensagem: andRules(requiredRule(true), maxLengthRule(2000)),
+    empresa_segmento_outro: isSegmentoOutro
+      ? andRules(requiredRule(true), maxLengthRule(255))
+      : undefined,
+    empresa_apoio_outro: isApoioOutro
+      ? andRules(requiredRule(true), maxLengthRule(255))
+      : undefined,
+  };
+
+  const SERVER_PATH_TO_FIELD: Record<string, string> = {
+    company: "empresa_nome",
+    segment: "empresa_segmento",
+    contactName: "empresa_responsavel",
+    phone: "empresa_telefone",
+    email: "empresa_email",
+    support: "empresa_apoio",
+    message: "empresa_mensagem",
   };
 
   const FIELD_LABELS: Record<string, string> = {
@@ -105,9 +122,27 @@ export function SponsorForm() {
       });
       setSent(true);
     } catch (error) {
-      setSubmitError(
-        error instanceof Error ? error.message : "Não foi possível enviar.",
-      );
+      if (error instanceof LeadValidationError) {
+        const { fields, unmapped } = mapServerIssues(
+          error.issues,
+          SERVER_PATH_TO_FIELD,
+        );
+        setErrors((prev) => ({ ...prev, ...fields }));
+        setAttempted(true);
+        if (unmapped.length > 0) {
+          setSubmitError(unmapped.map((issue) => issue.message).join(" "));
+        }
+        const firstName = Object.keys(fields)[0];
+        if (firstName) {
+          window.setTimeout(() => {
+            document.getElementById(`${firstName}-field`)?.focus();
+          }, 0);
+        }
+      } else {
+        setSubmitError(
+          error instanceof Error ? error.message : "Não foi possível enviar.",
+        );
+      }
     } finally {
       setSubmitting(false);
     }

@@ -7,11 +7,14 @@ import { FormErrors } from "@/components/ui/FormErrors";
 import { FormSuccess } from "@/components/ui/FormSuccess";
 import { useFormState } from "@/lib/useFormState";
 import { postLead } from "@/lib/api";
+import { LeadValidationError, mapServerIssues } from "@/lib/leadError";
 import { maskPhone } from "@/lib/validation";
 import {
   MIN_BIRTH_YEAR,
+  andRules,
   birthDateRule,
   emailRule,
+  maxLengthRule,
   phoneRule,
   requiredRule,
   todayDateInputValue,
@@ -23,7 +26,7 @@ export function MatriculaForm() {
   const [submitting, setSubmitting] = useState(false);
   const [submitError, setSubmitError] = useState<string | null>(null);
   const [attempted, setAttempted] = useState(false);
-  const { values, errors, handleChange, handleBlur, validateAll } =
+  const { values, errors, setErrors, handleChange, handleBlur, validateAll } =
     useFormState({
       aluno_nome: "",
       aluno_nascimento: "",
@@ -41,19 +44,35 @@ export function MatriculaForm() {
     });
 
   const rules: Record<string, FieldRule> = {
-    aluno_nome: requiredRule(true),
+    aluno_nome: andRules(requiredRule(true), maxLengthRule(255)),
     aluno_nascimento: birthDateRule(true),
     aluno_sexo: requiredRule(true),
     aluno_telefone: phoneRule(true),
     aluno_email: emailRule(false),
-    aluno_endereco: requiredRule(true),
-    aluno_escola: requiredRule(true),
-    aluno_serie: requiredRule(true),
+    aluno_endereco: andRules(requiredRule(true), maxLengthRule(255)),
+    aluno_escola: andRules(requiredRule(true), maxLengthRule(255)),
+    aluno_serie: andRules(requiredRule(true), maxLengthRule(255)),
     aluno_categoria: requiredRule(true),
-    resp_nome: requiredRule(true),
-    resp_parentesco: requiredRule(true),
+    resp_nome: andRules(requiredRule(true), maxLengthRule(255)),
+    resp_parentesco: andRules(requiredRule(true), maxLengthRule(255)),
     resp_telefone: phoneRule(true),
     resp_email: emailRule(true),
+  };
+
+  const SERVER_PATH_TO_FIELD: Record<string, string> = {
+    "student.name": "aluno_nome",
+    "student.birthDate": "aluno_nascimento",
+    "student.sex": "aluno_sexo",
+    "student.phone": "aluno_telefone",
+    "student.email": "aluno_email",
+    "student.address": "aluno_endereco",
+    "student.school": "aluno_escola",
+    "student.grade": "aluno_serie",
+    "student.category": "aluno_categoria",
+    "guardian.name": "resp_nome",
+    "guardian.relationship": "resp_parentesco",
+    "guardian.phone": "resp_telefone",
+    "guardian.email": "resp_email",
   };
 
   const FIELD_LABELS: Record<string, string> = {
@@ -115,9 +134,27 @@ export function MatriculaForm() {
       });
       setSent(true);
     } catch (error) {
-      setSubmitError(
-        error instanceof Error ? error.message : "Não foi possível enviar.",
-      );
+      if (error instanceof LeadValidationError) {
+        const { fields, unmapped } = mapServerIssues(
+          error.issues,
+          SERVER_PATH_TO_FIELD,
+        );
+        setErrors((prev) => ({ ...prev, ...fields }));
+        setAttempted(true);
+        if (unmapped.length > 0) {
+          setSubmitError(unmapped.map((issue) => issue.message).join(" "));
+        }
+        const firstName = Object.keys(fields)[0];
+        if (firstName) {
+          window.setTimeout(() => {
+            document.getElementById(`${firstName}-field`)?.focus();
+          }, 0);
+        }
+      } else {
+        setSubmitError(
+          error instanceof Error ? error.message : "Não foi possível enviar.",
+        );
+      }
     } finally {
       setSubmitting(false);
     }

@@ -1,11 +1,13 @@
 import {
   MESSAGES,
+  andRules,
   birthDateRule,
   cursorAfterDigits,
   emailRule,
   isValidEmail,
   isValidPhone,
   maskPhone,
+  maxLengthRule,
   phoneDigits,
   phoneRule,
   requiredRule,
@@ -153,5 +155,17 @@ describe("rules", () => {
   it("birthDateRule aceita data real e não futura", () => {
     expect(birthDateRule(true)("2010-05-14")).toBeNull();
     expect(birthDateRule(true)("1990-06-01")).toBeNull();
+  });
+
+  it("maxLengthRule limita o tamanho do valor", () => {
+    expect(maxLengthRule(5)("abcdef")).toBe("Use no máximo 5 caracteres.");
+    expect(maxLengthRule(5)("abcde")).toBeNull();
+  });
+
+  it("andRules combina regras na ordem informada", () => {
+    const rule = andRules(requiredRule(true), maxLengthRule(3));
+    expect(rule("")).toBe(MESSAGES.required);
+    expect(rule("abcd")).toBe("Use no máximo 3 caracteres.");
+    expect(rule("abc")).toBeNull();
   });
 });

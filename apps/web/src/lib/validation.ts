@@ -58,6 +58,21 @@ export const MESSAGES = {
 
 export type FieldRule = (value: string) => string | null;
 
+export function andRules(...rules: FieldRule[]): FieldRule {
+  return (value) => {
+    for (const rule of rules) {
+      const error = rule(value);
+      if (error) return error;
+    }
+    return null;
+  };
+}
+
+export function maxLengthRule(max: number): FieldRule {
+  return (value) =>
+    value.length > max ? `Use no máximo ${max} caracteres.` : null;
+}
+
 export function requiredRule(required: boolean): FieldRule {
   return (value) => {
     if (!value.trim()) return required ? MESSAGES.required : null;

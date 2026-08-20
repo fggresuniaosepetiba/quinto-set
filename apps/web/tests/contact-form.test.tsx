@@ -8,6 +8,7 @@ import {
 } from "@testing-library/react";
 import { ContactForm } from "@/components/ui/ContactForm";
 import { postLead } from "@/lib/api";
+import { LeadValidationError } from "@/lib/leadError";
 
 jest.mock("@/lib/api", () => ({
   postLead: jest.fn(),
@@ -98,6 +99,30 @@ describe("ContactForm", () => {
     fireEvent.click(screen.getByRole("button", { name: /enviar mensagem/i }));
     expect(
       await screen.findByText("Falha na conexão."),
+    ).toBeInTheDocument();
+  });
+
+  it("lista os erros do servidor por campo quando a API responde invalid_input", async () => {
+    mockedPostLead.mockRejectedValue(
+      new LeadValidationError([
+        { path: "email", message: "Informe um e-mail válido." },
+        { path: "message", message: "Use no máximo 2000 caracteres." },
+      ]),
+    );
+    render(<ContactForm />);
+    fillContactForm();
+    fireEvent.click(screen.getByRole("button", { name: /enviar mensagem/i }));
+
+    const summary = (
+      await screen.findByText("Corrija os campos abaixo:")
+    ).closest("[role='alert']") as HTMLElement;
+    expect(within(summary).getByText("E-mail")).toBeInTheDocument();
+    expect(
+      within(summary).getByText("Informe um e-mail válido."),
+    ).toBeInTheDocument();
+    expect(within(summary).getByText("Mensagem")).toBeInTheDocument();
+    expect(
+      within(summary).getByText("Use no máximo 2000 caracteres."),
     ).toBeInTheDocument();
   });
 

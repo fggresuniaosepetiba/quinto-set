@@ -1,4 +1,5 @@
 import type { CreatedLead, LeadsResponse } from "@quinto-set/contracts";
+import { LeadValidationError } from "./leadError";
 
 const API_BASE_URL =
   process.env.NEXT_PUBLIC_API_URL ?? "http://localhost:3001";
@@ -24,9 +25,12 @@ export async function postLead<T = CreatedLead>(
       try {
         const body = await response.json();
         if (body?.error === "invalid_input") {
-          message = "Alguns dados estão inválidos. Confira o formulário.";
+          throw new LeadValidationError(
+            Array.isArray(body.issues) ? body.issues : [],
+          );
         }
-      } catch {
+      } catch (error) {
+        if (error instanceof LeadValidationError) throw error;
         // resposta sem JSON: mantém a mensagem genérica
       }
       throw new Error(message);
