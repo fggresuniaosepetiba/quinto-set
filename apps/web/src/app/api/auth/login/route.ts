@@ -1,9 +1,13 @@
 import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
 import { cookies } from "next/headers";
+import {
+  ADMIN_ACTIVITY_COOKIE,
+  ADMIN_COOKIE,
+  getIdleTimeoutMs,
+} from "@/lib/adminSession";
 
 const API_BASE_URL = process.env.API_URL ?? "http://localhost:3001";
-const ADMIN_COOKIE = "admin_session";
 
 export async function POST(request: NextRequest) {
   const payload = await request.json().catch(() => null);
@@ -27,18 +31,23 @@ export async function POST(request: NextRequest) {
   const session = body as { token: string; expiresAt: string };
   const maxAge = Math.max(
     1,
-    Math.floor(
-      (new Date(session.expiresAt).getTime() - Date.now()) / 1000,
-    ),
+    Math.floor((new Date(session.expiresAt).getTime() - Date.now()) / 1000),
   );
 
   const cookieStore = await cookies();
+  const idleMs = getIdleTimeoutMs();
   cookieStore.set(ADMIN_COOKIE, session.token, {
     httpOnly: true,
     secure: process.env.NODE_ENV === "production",
     sameSite: "lax",
     path: "/",
-    maxAge,
+  });
+  cookieStore.set(ADMIN_ACTIVITY_COOKIE, String(Date.now()), {
+    httpOnly: true,
+    secure: process.env.NODE_ENV === "production",
+    sameSite: "lax",
+    path: "/",
+    maxAge: Math.ceil(idleMs / 1000),
   });
 
   return NextResponse.json({ ok: true });
