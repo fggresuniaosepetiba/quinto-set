@@ -6,6 +6,8 @@ import {
   getIdleTimeoutMs,
 } from "@/lib/adminSession";
 
+const API_BASE_URL = process.env.API_URL ?? "http://localhost:3001";
+
 export async function POST() {
   const cookieStore = await cookies();
   const token = cookieStore.get(ADMIN_COOKIE)?.value;
@@ -33,6 +35,27 @@ export async function POST() {
     path: "/",
     maxAge: Math.ceil(idleMs / 1000),
   });
+
+  try {
+    const response = await fetch(`${API_BASE_URL}/auth/refresh`, {
+      method: "POST",
+      headers: { Authorization: `Bearer ${token}` },
+    });
+    if (response.ok) {
+      const session = (await response.json()) as {
+        token: string;
+        expiresAt: string;
+      };
+      if (session.token) {
+        cookieStore.set(ADMIN_COOKIE, session.token, {
+          httpOnly: true,
+          secure: process.env.NODE_ENV === "production",
+          sameSite: "lax",
+          path: "/",
+        });
+      }
+    }
+  } catch {}
 
   return NextResponse.json({ ok: true });
 }

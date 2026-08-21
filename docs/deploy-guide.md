@@ -23,7 +23,12 @@ O site é um monorepo. Configuração atual no painel Vercel:
 
 Os formulários enviam os dados para a API via `NEXT_PUBLIC_API_URL` (default local `http://localhost:3001`). Na Vercel, defina:
 
-- `NEXT_PUBLIC_API_URL` = URL pública da API (ex.: `https://api.quintoset.com.br`).
+- `API_URL` = URL da API para o BFF server-side (ex.: `https://quinto-set-api.onrender.com`)
+- `NEXT_PUBLIC_API_URL` = URL pública da API para o browser (mesmo valor acima)
+- `ADMIN_IDLE_TIMEOUT_MINUTES` + `NEXT_PUBLIC_ADMIN_IDLE_TIMEOUT_MINUTES` = `15` (precisam ter o mesmo valor; `NEXT_PUBLIC_*` é lido no browser, `ADMIN_*` no proxy/edge)
+- `ADMIN_IDLE_WARNING_MINUTES` + `NEXT_PUBLIC_ADMIN_IDLE_WARNING_MINUTES` = `2` (aviso antes de deslogar)
+
+> `NEXT_PUBLIC_*` é inlinado no build — após alterar, faça **Redeploy** na Vercel.
 
 Modelo em `apps/web/.env.example`.
 
@@ -44,16 +49,17 @@ A API publicada no Render como Web Service, usando Postgres gerenciado no Neon.
 
 ### Variáveis de ambiente (API)
 
-| Variável | Valor |
-| --- | --- |
-| `NODE_ENV` | `production` |
-| `DATABASE_URL` | connection string do Neon (override; prioridade sobre `DATABASE_URL_PROD`) |
-| `CORS_ORIGIN` | `https://quintoset.vercel.app` |
-| `AUTH_SECRET` | segredo forte (32+ chars) |
-| `ADMIN_USERNAME` | `quintoset.adm` |
-| `ADMIN_PASSWORD` | senha forte (diferente da de dev) |
-| `LOG_LEVEL` | `info` |
-| `PORT` | não setar (Render injeta) |
+| Variável         | Valor                                                                      |
+| ---------------- | -------------------------------------------------------------------------- |
+| `NODE_ENV`       | `production`                                                               |
+| `DATABASE_URL`   | connection string do Neon (override; prioridade sobre `DATABASE_URL_PROD`) |
+| `CORS_ORIGIN`    | `https://quintoset.vercel.app`                                             |
+| `AUTH_SECRET`    | segredo forte (32+ chars)                                                  |
+| `ADMIN_USERNAME` | `quintoset.adm`                                                            |
+| `ADMIN_PASSWORD` | senha forte (diferente da de dev)                                          |
+| `AUTH_TOKEN_TTL` | `900` (15 min, sliding — renovado a cada atividade; sem teto de 7 dias)    |
+| `LOG_LEVEL`      | `info`                                                                     |
+| `PORT`           | não setar (Render injeta)                                                  |
 
 > O `PORT` é injetado automaticamente pelo Render. As migrations do Drizzle rodam no boot (não precisa de passo extra no pipeline).
 

@@ -27,10 +27,11 @@ export function createApp(authService?: AuthService): express.Express {
   const app = express();
   app.use(cors(corsOptions()));
   app.use(express.json());
-  app.use(healthRouter(resolveHealthController()));
-  app.use(authRouter(resolveAuthController()));
-
   const auth = authService ?? container.resolve(AuthService);
+  app.use(healthRouter(resolveHealthController()));
+  app.use(
+    authRouter(resolveAuthController(), (token) => auth.verifyToken(token)),
+  );
   app.use(
     formRouter(
       resolveFormController(),

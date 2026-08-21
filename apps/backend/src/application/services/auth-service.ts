@@ -41,6 +41,15 @@ export class AuthService {
     return { sub: payload.sub, username: payload.username };
   }
 
+  async refresh(token: string): Promise<AuthSession> {
+    const payload = this.verifyToken(token);
+    const admin = await this.repository.findByUsername(payload.username);
+    if (!admin || admin.id !== payload.sub) {
+      throw new Error("invalid_token");
+    }
+    return this.createSession(admin);
+  }
+
   async seedAdmin(username: string, password: string): Promise<Admin> {
     const admin: Admin = {
       id: randomUUID(),

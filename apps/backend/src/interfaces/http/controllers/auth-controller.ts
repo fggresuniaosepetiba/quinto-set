@@ -18,4 +18,20 @@ export class AuthController {
       next(error);
     }
   }
+
+  async refresh(
+    req: Request,
+    res: Response,
+    next: NextFunction,
+  ): Promise<void> {
+    try {
+      const header = req.headers.authorization;
+      const token = header?.startsWith("Bearer ") ? header.slice(7) : undefined;
+      if (!token) throw new Error("invalid_token");
+      const session = await this.authService.refresh(token);
+      res.status(200).json(session);
+    } catch (error) {
+      next(error);
+    }
+  }
 }
