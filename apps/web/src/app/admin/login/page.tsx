@@ -12,9 +12,6 @@ function LoginForm() {
   const searchParams = useSearchParams();
   const [submitting, setSubmitting] = useState(false);
   const [submitError, setSubmitError] = useState<string | null>(null);
-  const reason = searchParams.get("reason");
-  const idleMinutes =
-    process.env.NEXT_PUBLIC_ADMIN_IDLE_TIMEOUT_MINUTES ?? "15";
   const { values, errors, handleChange, handleBlur, validateAll } =
     useFormState({
       username: "",
@@ -70,15 +67,6 @@ function LoginForm() {
           <p className="mt-1 text-sm text-navy-900/65">
             Entre para gerenciar os leads.
           </p>
-          {reason === "idle" && (
-            <p
-              role="alert"
-              className="mt-6 rounded-lg border border-amber-500/30 bg-amber-500/10 px-4 py-3 text-sm text-amber-800"
-            >
-              Você ficou {idleMinutes} min sem usar e foi desconectado. Faça
-              login novamente.
-            </p>
-          )}
 
           {submitError && (
             <p
