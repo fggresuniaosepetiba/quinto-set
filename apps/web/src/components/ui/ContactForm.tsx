@@ -185,7 +185,14 @@ export function ContactForm({
         <Field
           label="Assunto"
           name="assunto"
-          options={["Matrícula", "Aula experimental", "Patrocínio", "Voluntariado", "Imprensa", "Outro"]}
+          options={[
+            "Matrícula",
+            "Aula experimental",
+            "Patrocínio",
+            "Voluntariado",
+            "Imprensa",
+            "Outro",
+          ]}
           value={values.assunto}
           onChange={handleChange}
           onBlur={blur}
@@ -198,6 +205,7 @@ export function ContactForm({
         name="mensagem"
         required
         rows={5}
+        maxLength={2000}
         placeholder="Como podemos ajudar?"
         value={values.mensagem}
         onChange={handleChange}

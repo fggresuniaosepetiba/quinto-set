@@ -223,7 +223,16 @@ export function SponsorForm() {
             <Field
               label="Segmento"
               name="empresa_segmento"
-              options={["Educação", "Esporte", "Saúde", "Comunicação", "Tecnologia", "Comércio", "Indústria", "Outro"]}
+              options={[
+                "Educação",
+                "Esporte",
+                "Saúde",
+                "Comunicação",
+                "Tecnologia",
+                "Comércio",
+                "Indústria",
+                "Outro",
+              ]}
               value={values.empresa_segmento}
               onChange={handleChangeCleaned}
               onBlur={blur}
@@ -250,7 +259,15 @@ export function SponsorForm() {
               label="Tipo de apoio / interesse"
               name="empresa_apoio"
               required
-              options={["Patrocínio", "Apoio financeiro", "Doação de materiais", "Equipamentos esportivos", "Voluntariado", "Parceria institucional", "Outro"]}
+              options={[
+                "Patrocínio",
+                "Apoio financeiro",
+                "Doação de materiais",
+                "Equipamentos esportivos",
+                "Voluntariado",
+                "Parceria institucional",
+                "Outro",
+              ]}
               value={values.empresa_apoio}
               onChange={handleChangeCleaned}
               onBlur={blur}
@@ -278,6 +295,7 @@ export function SponsorForm() {
           name="empresa_mensagem"
           required
           rows={5}
+          maxLength={2000}
           placeholder="Conte um pouco sobre o interesse da sua empresa em apoiar a Quinto Set."
           value={values.empresa_mensagem}
           onChange={handleChange}

@@ -88,9 +88,28 @@ export function Field({
     onChange(name, event.target.value);
   };
 
+  const handleTextareaChange = (
+    event: React.ChangeEvent<HTMLTextAreaElement>,
+  ) => {
+    let next = event.target.value;
+    if (typeof maxLength === "number" && next.length > maxLength) {
+      next = next.slice(0, maxLength);
+    }
+    onChange(name, next);
+  };
+
   const handleBlur = () => {
     onBlur?.(name);
   };
+
+  const showCount = typeof maxLength === "number" && !hidden;
+  const count = value.length;
+  const countTone =
+    typeof maxLength === "number" && count >= maxLength
+      ? "text-red-600"
+      : typeof maxLength === "number" && count > maxLength * 0.9
+        ? "text-amber-600"
+        : "text-navy-900/50";
 
   return (
     <label className={cn(hidden ? "hidden" : "block", className)}>
@@ -125,18 +144,29 @@ export function Field({
           ))}
         </select>
       ) : rows ? (
-        <textarea
-          id={id}
-          name={name}
-          required={required}
-          rows={rows}
-          placeholder={placeholder}
-          value={value}
-          onChange={(event) => onChange(name, event.target.value)}
-          onBlur={handleBlur}
-          className={cn(controlClasses, "resize-y")}
-          {...errorProps}
-        />
+        <>
+          <textarea
+            id={id}
+            name={name}
+            required={required}
+            rows={rows}
+            placeholder={placeholder}
+            value={value}
+            onChange={handleTextareaChange}
+            onBlur={handleBlur}
+            maxLength={maxLength}
+            className={cn(controlClasses, "resize-y")}
+            {...errorProps}
+          />
+          {showCount && (
+            <span
+              aria-live="polite"
+              className={cn("mt-1.5 block text-right text-xs", countTone)}
+            >
+              {count}/{maxLength}
+            </span>
+          )}
+        </>
       ) : (
         <>
           <input
